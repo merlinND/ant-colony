@@ -1,1 +1,19 @@
-Hello {{name}}!
+
+<div class="container-fluid  h-100" id="ants-app">
+    <h1>Ant Colony</h1>
+    {{!-- <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="#">Ant Colony</a>
+    </nav> --}}
+
+    <div class="row h-100">
+        <div class="col">
+            <h2>Editor</h2>
+            {{>code_editor}}
+        </div>
+
+        <div class="col">
+            <h2>Preview</h2>
+            {{>game_view}}
+        </div>
+    </div>
+</div>
