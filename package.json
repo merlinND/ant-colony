@@ -23,10 +23,19 @@
   },
   "homepage": "https://github.com/merlinND/ant-colony#readme",
   "dependencies": {
+    "bootstrap": "^4.3.1",
     "browserify": "^16.3.0",
     "codemirror": "^5.48.0",
     "express": "^4.17.1",
     "express-handlebars": "^3.1.0",
-    "jquery": "^3.4.1"
+    "jquery": "^3.4.1",
+    "phaser": "^3.18.1",
+    "popper.js": "^1.15.0"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.4",
+    "grunt-browserify": "^5.3.0",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-express-server": "^0.5.4"
   }
 }
