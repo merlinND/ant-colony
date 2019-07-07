@@ -25,8 +25,11 @@ app.use('/css', express.static(__dirname + '/node_modules/codemirror/theme'));
 app.get('/', (req, res) => {
     res.render('index', { })
 })
-app.get('/playground', (req, res) => {
-    res.render('playground', { })
+app.get('/top-down-playground', (req, res) => {
+    res.render('playground', { containerId: 'top-down-playground' })
+})
+app.get('/side-scroller-playground', (req, res) => {
+    res.render('playground', { containerId: 'side-scroller-playground' })
 })
 
 
