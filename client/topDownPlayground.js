@@ -43,7 +43,14 @@ const init = function(container) {
 
 
         player = this.physics.add.sprite(400, 350, "player");
+        player.setCollideWorldBounds(true);
         this.physics.add.collider(player, worldLayer);
+
+        // Camera configuration
+        this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+        this.cameras.main.setDeadzone(150, 150);
+        this.cameras.main.setZoom(2);
+        this.cameras.main.startFollow(player, true);
     }
 
     function update() {
