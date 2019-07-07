@@ -23,6 +23,7 @@ const init = function(container) {
         const map = this.make.tilemap({ key: "test-level" });
 
         const tileset = map.addTilesetImage("Terrain", "tiles");
+        this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
         // Parameters: layer name (or index) from Tiled, tileset, x, y
         const backgroundLayer = map.createStaticLayer("background", tileset, 0, 0);
@@ -43,14 +44,15 @@ const init = function(container) {
 
 
         player = this.physics.add.sprite(400, 350, "player");
-        player.setCollideWorldBounds(true);
         this.physics.add.collider(player, worldLayer);
 
         // Camera configuration
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.cameras.main.setDeadzone(150, 150);
-        this.cameras.main.setZoom(2);
+        // this.cameras.main.setZoom(2);
         this.cameras.main.startFollow(player, true);
+
+        player.setCollideWorldBounds(true);
     }
 
     function update() {
