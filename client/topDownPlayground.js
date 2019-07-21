@@ -1,5 +1,5 @@
 const Phaser = require("phaser");
-const agent = require("./agent.js");
+const Agent = require("./agent.js");
 const Game = require('./game.js');
 
 const init = function(container) {
@@ -7,6 +7,7 @@ const init = function(container) {
 
     let player;
     let CurrentLevel = Game.levels.TEST1;
+    let defaultAgentName = 'rotating';
 
     function preload () {
         this.load.tilemapTiledJSON('test-level', 'maps/test.json');
@@ -52,21 +53,42 @@ const init = function(container) {
         //   faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
         // });
 
-
         player = this.physics.add.sprite(400, 350, "ant");
         this.player = player;
         player.maxWalkSpeed = 45;
-        player.agent = new agent.Agent();
         this.anims.create({
             key: 'up',
             frames: this.anims.generateFrameNumbers('ant', { start: 0, end: 61 }),
             frameRate: 120,
             repeat: -1
         });
+        this.physics.add.collider(player, worldLayer);
+
         // For interactive debugging / introspection
         window.player = player;
 
-        this.physics.add.collider(player, worldLayer);
+        // Initialize witht the default agent
+        this.setAgent = function(name, AgConstructor) {
+            this.currentAgentName = name;
+            this.player.agent = new AgConstructor(this);
+            // this.player.agent.initialize();  // Already taken care of by constructor
+            this.agentIndicator.setText("Agent: " + this.currentAgentName);
+        }
+        this.agentIndicator = this.add.text(10, 10, "Agent: ", {'align': 'left'});
+        this.agentIndicator.setScrollFactor(0);
+        this.setAgent(defaultAgentName, Agent.available[defaultAgentName]);
+
+        // Keyboard shortcut to change between agents
+        this.cursors.space.addListener('down', function () {
+            var availableNames = Object.keys(Agent.available);
+            var i = availableNames.indexOf(this.currentAgentName);
+            i = (i + 1) % availableNames.length;
+            var nextAgentName = availableNames[i];
+
+            this.player.agent.stop(this, player);
+            this.setAgent(nextAgentName, Agent.available[nextAgentName]);
+        }, this);
+
 
         // Camera configuration
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
@@ -84,36 +106,13 @@ const init = function(container) {
     }
 
     function update() {
-        const cursors = this.cursors;
-
         if (!this.levelComplete && this.level.isComplete()) {
             var text = this.add.text(game.scale.width / 2, 10, "Level complete!", {'align': 'center'});
             text.setScrollFactor(0);
             this.levelComplete = true;
         }
 
-        // Stop any previous movement from the last frame
-        player.body.setVelocity(0);
-
-        // Horizontal movement
-        if (cursors.left.isDown) {
-            player.body.setVelocityX(-player.maxWalkSpeed);
-            player.anims.play('up', true);
-        } else if (cursors.right.isDown) {
-            player.body.setVelocityX(player.maxWalkSpeed);
-            player.anims.play('up', true);
-        }
-
-        // Vertical movement
-        if (cursors.up.isDown) {
-            player.body.setVelocityY(-player.maxWalkSpeed);
-            player.anims.play('up', true);
-        } else if (cursors.down.isDown) {
-            player.body.setVelocityY(player.maxWalkSpeed);
-            player.anims.play('up', true);
-        }
-
-        player.agent.update(player);
+        player.agent.update(this, player);
 
         // Normalize and scale the velocity so that player can't move faster along a diagonal
         player.body.velocity.normalize().scale(300);
