@@ -7,7 +7,7 @@ const init = function(container) {
 
     let player;
     let CurrentLevel = Game.levels.TEST1;
-    let defaultAgentName = 'rotating';
+    let defaultAgentName = 'keyboard';
 
     function preload () {
         this.load.tilemapTiledJSON('test-level', 'maps/test.json');
@@ -53,9 +53,9 @@ const init = function(container) {
         //   faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
         // });
 
-        player = this.physics.add.sprite(400, 350, "ant");
+        player = this.physics.add.sprite(128, 256, "ant");
         this.player = player;
-        player.maxWalkSpeed = 45;
+        player.maxWalkSpeed = 30;
         this.anims.create({
             key: 'up',
             frames: this.anims.generateFrameNumbers('ant', { start: 0, end: 61 }),

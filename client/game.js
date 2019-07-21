@@ -27,8 +27,12 @@ const TestLevel1 = new Class({
     create: function create() {
         this.inventory = [];
         this.items = [];
-        for (var i = 0; i < 5; ++i) {
-            var item = this.game.physics.add.sprite(300 + 32 * i, 100 + 32 * i, "objective-item");
+        // const positions = [[332, 100], [543, 64], [256, 460], [64, 680]];
+        const positions = [[332, 100], [543, 64], [256, 120], [64, 64]];
+        for (var i = 0; i < positions.length; ++i) {
+            // var item = this.game.physics.add.sprite(300 + 32 * i, 100 + 32 * i, "objective-item");
+            var pos = positions[i];
+            var item = this.game.physics.add.sprite(pos[0], pos[1], "objective-item");
             this.items.push(item);
 
             this.game.physics.add.overlap(this.game.player, item, function(a, b) {

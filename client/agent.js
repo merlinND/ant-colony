@@ -15,7 +15,6 @@ var Agent = new Class({
     stop: function () {},
 });
 
-
 var ProgrammableAgent = new Class({
     Extends: Agent,
 
@@ -23,6 +22,43 @@ var ProgrammableAgent = new Class({
     initialize: function () {},
     update: function () {},
     stop: function () {},
+});
+
+var GreedyAgent = new Class({
+    Extends: ProgrammableAgent,
+
+    update: function (game, player) {
+        var level = game.level;
+        if (level.isComplete()) {
+            player.body.setVelocity(0, 0);
+            game.setAgent('rotating', RotatingAgent);
+            return;
+        }
+
+        // TODO: this assumes a certain structure of the level -> detect subclass / level type?
+        var target = null;
+        var direction;
+        var distance = Infinity;
+        level.items.forEach(function(item) {
+            if (level.inventory.indexOf(item) >= 0) { return; }
+            var newDirection = new Phaser.Math.Vector2(item.x - player.x, item.y - player.y);
+            var newDistance = newDirection.length();
+            if (newDistance < distance) {
+                distance = newDistance;
+                direction = newDirection;
+                target = item;
+            }
+        });
+        if (target) {
+            // TODO: handle obstructions (path planning)
+            direction.normalize().scale(player.maxWalkSpeed);
+            player.body.setVelocity(direction.x, direction.y);
+        }
+    },
+
+    stop: function (game, player) {
+        player.body.setVelocity(0, 0);
+    },
 });
 
 var RotatingAgent = new Class({
@@ -85,8 +121,7 @@ var KeyboardAgent = new Class({
     },
 
     stop: function update(game, player) {
-        player.body.setVelocityX(0);
-        player.body.setVelocityY(0);
+        player.body.setVelocity(0, 0);
     },
 });
 
@@ -96,6 +131,6 @@ module.exports = {
     available: {
         'rotating': RotatingAgent,
         'keyboard': KeyboardAgent,
-        'programnable': ProgrammableAgent,
+        'greedy': GreedyAgent,
     }
 }
