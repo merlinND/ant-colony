@@ -1,7 +1,11 @@
 const $ = require('jquery');
 require('bootstrap');
-const codemirror = require("codemirror");
+
+const CodeMirror = require("codemirror");
 require("codemirror/mode/javascript/javascript");
+var CodeMirrorPersist = require("codemirror-persist")
+CodeMirrorPersist(CodeMirror)
+
 
 const sideScrollerPlayground = require("./sideScrollerPlayground.js")
 const topDownPlayground = require("./topDownPlayground.js")
@@ -10,7 +14,7 @@ const topDownPlayground = require("./topDownPlayground.js")
 const initAntsApp = function(container) {
     console.log('Initializing ants app (editor + game)');
     var editorTarget = container.find(".code-editor textarea")[0];
-    var editor = codemirror.fromTextArea(editorTarget, {
+    var editor = CodeMirror.fromTextArea(editorTarget, {
         mode: "javascript",
         lineWrapping: false,
         // extraKeys: {
@@ -21,7 +25,13 @@ const initAntsApp = function(container) {
         theme: 'base16-light', // 'monokai',
         value: "",
         indentUnit: 4,
+        persist: true // enable buffer persistence
     });
+
+    $('button[name="play"]').on('click', function() {
+        console.log(editor.getValue());
+    })
+
 
     // TODO: initialize game engine
 
@@ -31,7 +41,7 @@ const initAntsApp = function(container) {
 
 $(function() {
     $('.instructions button[name="begin"]').on('click', function() {
-        $('#nav-editor-tab').tab('show')
+        $('#nav-editor-tab').tab('show');
     })
 
 
