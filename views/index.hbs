@@ -6,14 +6,49 @@
     </nav> --}}
 
     <div class="row h-100">
-        <div class="col">
-            <h2>Editor</h2>
-            {{>code_editor}}
+
+        {{!-- Left column --}}
+        <div class="col editor-col">
+            <nav>
+                <div class="nav nav-tabs" role="tablist">
+                    <a class="nav-item nav-link" id="nav-instructions-tab" data-toggle="tab" href="#nav-instructions" role="tab">Instructions</a>
+
+                    <a class="nav-item nav-link active" id="nav-editor-tab" data-toggle="tab" href="#nav-editor" role="tab">Editor</a>
+                </div>
+            </nav>
+
+            <div class="tab-content">
+                <div class="tab-pane" id="nav-instructions">
+                    {{>instructions}}
+                </div>
+
+                <div class="tab-pane show active" id="nav-editor">
+                    {{>code_editor}}
+
+                    <div class="button-bar">
+                        <button name="reset">Reset</button>
+                        <button name="play" class="bg-primary">Play</button>
+                        <button name="ff-2">x2</button>
+                        <button name="ff-5">x5</button>
+                        <button name="ff-10">x10</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
+        {{!-- Right column --}}
         <div class="col">
-            <h2>Preview</h2>
-            {{>game_view}}
+            <nav>
+                <div class="nav nav-tabs" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-game-tab" data-toggle="tab" href="#nav-game" role="tab">Game</a>
+                </div>
+            </nav>
+
+            <div class="tab-content">
+                <div class="tab-pane show active" id="nav-game">
+                    {{>game_view}}
+                </div>
+            </div>
         </div>
     </div>
 </div>

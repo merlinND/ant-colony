@@ -1,9 +1,11 @@
 const $ = require('jquery');
+require('bootstrap');
 const codemirror = require("codemirror");
-const codemirror_js = require("codemirror/mode/javascript/javascript");
+require("codemirror/mode/javascript/javascript");
 
 const sideScrollerPlayground = require("./sideScrollerPlayground.js")
 const topDownPlayground = require("./topDownPlayground.js")
+
 
 const initAntsApp = function(container) {
     console.log('Initializing ants app (editor + game)');
@@ -28,6 +30,10 @@ const initAntsApp = function(container) {
 
 
 $(function() {
+    $('.instructions button[name="begin"]').on('click', function() {
+        $('#nav-editor-tab').tab('show')
+    })
+
 
     var container = $('#ants-app');
     if (container.length) {
