@@ -34,6 +34,7 @@ const showCodeError = function(editor, exception) {
         editor.widgets = []
 
     // Find offending line in user code
+    // TODO: make this more robust and work cross-browser
     const message = exception.message;
     const lineRegex = /eval .+ <anonymous>:(\d+)/;
     var exceptionLine;

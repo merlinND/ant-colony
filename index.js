@@ -1,15 +1,32 @@
 const express = require('express')
 const exphbs  = require('express-handlebars');
+var i18n      = require('i18n');
 
 // ----- Configuration
 const app = express()
 const port = 3000
 
+// Internationalization
+i18n.configure({
+    locales: ['en','fr'],
+    cookie: 'locale',
+    directory: __dirname + '/locales',
+    defaultLocale: 'en',
+});
+
 app.engine('.hbs', exphbs({
     extname: 'hbs',
+    helpers: {
+        i18n: function() {
+            return i18n.__.apply(this,arguments);
+        },
+        __n: function() {
+            return i18n.__n.apply(this, arguments);
+        },
+    },
 }));
 app.set('view engine', '.hbs');
-
+app.use(i18n.init);
 
 // ----- Static files
 app.use(express.static('static'))

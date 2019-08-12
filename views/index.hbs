@@ -1,6 +1,6 @@
 
 <div class="container-fluid  h-100" id="ants-app">
-    <h1>Ant Colony</h1>
+    <h1>{{i18n "mainTitle"}}</h1>
     {{!-- <nav class="navbar navbar-light bg-light">
         <a class="navbar-brand" href="#">Ant Colony</a>
     </nav> --}}
@@ -11,9 +11,9 @@
         <div class="col editor-col">
             <nav>
                 <div class="nav nav-tabs" role="tablist">
-                    <a class="nav-item nav-link" id="nav-instructions-tab" data-toggle="tab" href="#nav-instructions" role="tab">Instructions</a>
+                    <a class="nav-item nav-link" id="nav-instructions-tab" data-toggle="tab" href="#nav-instructions" role="tab">{{i18n "instructions"}}</a>
 
-                    <a class="nav-item nav-link active" id="nav-editor-tab" data-toggle="tab" href="#nav-editor" role="tab">Editor</a>
+                    <a class="nav-item nav-link active" id="nav-editor-tab" data-toggle="tab" href="#nav-editor" role="tab">{{i18n "editor"}}</a>
                 </div>
             </nav>
 
@@ -26,8 +26,8 @@
                     {{>code_editor}}
 
                     <div class="button-bar">
-                        <button name="reset">Reset</button>
-                        <button name="play" class="bg-primary">Play</button>
+                        <button name="reset">{{i18n "editor.reset"}}</button>
+                        <button name="play" class="bg-primary">{{i18n "editor.play"}}</button>
                         <button name="ff-2">x2</button>
                         <button name="ff-5">x5</button>
                         <button name="ff-10">x10</button>
@@ -40,7 +40,7 @@
         <div class="col">
             <nav>
                 <div class="nav nav-tabs" role="tablist">
-                    <a class="nav-item nav-link active" id="nav-game-tab" data-toggle="tab" href="#nav-game" role="tab">Game</a>
+                    <a class="nav-item nav-link active" id="nav-game-tab" data-toggle="tab" href="#nav-game" role="tab">{{i18n "game"}}</a>
                 </div>
             </nav>
 
