@@ -75,6 +75,8 @@ const showCodeError = function(editor, exception) {
 }
 
 
+
+
 const initAntsApp = function(container) {
     console.log('Initializing ants app (editor + game)');
     var editorTarget = container.find(".code-editor textarea")[0];
@@ -95,13 +97,26 @@ const initAntsApp = function(container) {
     // For debugging
     window.code_editor = editor;
 
+    // Initialize game engine
+    // TODO: Refactor actual game away from "playground" file.
+    var gameContainer = container.find(".game-view");
+    var game = topDownPlayground.init(gameContainer);
+
     $('button[name="play"]').on('click', function() {
-        const user_code = editor.getValue();
-        executeUserCode(user_code, editor);
+        const userCode = editor.getValue();
+        game.setUserCode(userCode);
     })
+    gameContainer.on('click', function() {
+        game.input.enabled = true;
+    });
+    gameContainer.on('mouseenter', function() {
+        game.input.enabled = true;
+    });
+    gameContainer.on('mouseleave', function() {
+        game.input.enabled = false;
 
-
-    // TODO: initialize game engine
+    });
+    game.input.enabled = false;
 
     return editor;
 }

@@ -68,15 +68,9 @@ const init = function(container) {
         window.player = player;
 
         // Initialize witht the default agent
-        this.setAgent = function(name, AgConstructor) {
-            this.currentAgentName = name;
-            this.player.agent = new AgConstructor(this);
-            // this.player.agent.initialize();  // Already taken care of by constructor
-            this.agentIndicator.setText("Agent: " + this.currentAgentName);
-        }
         this.agentIndicator = this.add.text(10, 10, "Agent: ", {'align': 'left'});
         this.agentIndicator.setScrollFactor(0);
-        this.setAgent(defaultAgentName, Agent.available[defaultAgentName]);
+        this.setAgent(defaultAgentName);
 
         // Keyboard shortcut to change between agents
         this.cursors.space.addListener('down', function () {
@@ -85,7 +79,6 @@ const init = function(container) {
             i = (i + 1) % availableNames.length;
             var nextAgentName = availableNames[i];
 
-            this.player.agent.stop(this, player);
             this.setAgent(nextAgentName, Agent.available[nextAgentName]);
         }, this);
 
@@ -123,6 +116,23 @@ const init = function(container) {
         }
     }
 
+    var setAgent = function(name) {
+        if (this.player.agent)
+            this.player.agent.stop(this, player);
+
+        this.currentAgentName = name;
+        this.player.agent = new Agent.available[name](this);
+        // this.player.agent.initialize();  // Already taken care of by constructor
+        this.agentIndicator.setText("Agent: " + this.currentAgentName);
+    };
+
+    var setUserCode = function(code) {
+        this.setAgent("programmable");
+        var agent = this.player.agent;
+        agent.setUserCode(code);
+    };
+
+
     var game_config = {
         type: Phaser.AUTO,
         width: 600,
@@ -135,14 +145,28 @@ const init = function(container) {
                 // debug: true,
             }
         },
+        input: {
+            keyboard: {
+                target: container[0],
+            },
+        },
         scene: {
             preload: preload,
             create: create,
-            update: update
+            update: update,
+            extend: {
+                setAgent: setAgent,
+                setUserCode: setUserCode,
+            }
         }
     };
 
+
     var game = new Phaser.Game(game_config);
+    game.setUserCode = function (code) {
+        // TODO: support multiple scenes.
+        this.scene.scenes[0].setUserCode(code);
+    };
     return game;
 }
 

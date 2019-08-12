@@ -64,6 +64,12 @@ body, html {
     left: 0px;
     text-align: right;
 }
+.editor-col {
+    max-width: 50%;
+}
+.editor-col .CodeMirror {
+    height: 100%;
+}
 .editor-col button {
     font-size: 1.2em;
     text-align: center;

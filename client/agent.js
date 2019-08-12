@@ -18,10 +18,36 @@ var Agent = new Class({
 var ProgrammableAgent = new Class({
     Extends: Agent,
 
-    // TODO
-    initialize: function () {},
-    update: function () {},
-    stop: function () {},
+    initialize: function () {
+        this.clearUserCode();
+    },
+
+    setUserCode: function (text) {
+        this.userCode = text;
+        this.userFunction = new Function('game', 'player', this.userCode);
+    },
+    clearUserCode: function () {
+        this.userCode = null;
+        this.userFunction = null;
+    },
+
+    update: function update(game, player) {
+        if (!this.userCode)
+            return false;
+
+        try {
+            this.userFunction(game, player);
+        } catch (e) {
+            // TODO: surface the error to the UI / code editor
+            console.error(e);
+            this.clearUserCode();
+        }
+    },
+
+    stop: function update(game, player) {
+        player.body.setAngularVelocity(0);
+        player.body.setVelocity(0, 0);
+    },
 });
 
 var GreedyAgent = new Class({
@@ -129,6 +155,7 @@ var KeyboardAgent = new Class({
 module.exports = {
     Agent: Agent,
     available: {
+        'programmable': ProgrammableAgent,
         'rotating': RotatingAgent,
         'keyboard': KeyboardAgent,
         'greedy': GreedyAgent,
