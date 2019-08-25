@@ -1,6 +1,6 @@
 const express = require('express')
 const exphbs  = require('express-handlebars');
-var i18n      = require('i18n');
+const i18n    = require('i18n');
 
 // ----- Configuration
 const app = express()
