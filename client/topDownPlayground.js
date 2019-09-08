@@ -1,13 +1,15 @@
 const Phaser = require("phaser");
 const Agent = require("./agent.js");
 const Game = require('./game.js');
+const Ant = require("./ant.js");
+const logger = require("./logger.js");
 
 const init = function(container) {
     console.log('Initializing top-down playground (game only)');
 
     let player;
     let CurrentLevel = Game.levels.TEST1;
-    let defaultAgentName = 'keyboard';
+    let defaultAgentName = 'programmable';
 
     function preload () {
         this.load.tilemapTiledJSON('test-level', 'maps/test.json');
@@ -27,6 +29,8 @@ const init = function(container) {
         window.game = this;
         window.level = this.level;
     }
+
+    var ants = [];
 
     function create () {
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -53,13 +57,21 @@ const init = function(container) {
         //   faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
         // });
 
-        player = this.physics.add.sprite(128, 256, "ant");
+
+        for (let i = 0; i < 3; i++) {
+            var ant = new Ant.Ant(this.physics.add.sprite(256, (i+1)*128, "ant"), this);
+            ant.maxWalkSpeed = 30;
+            this.physics.add.collider(ant, worldLayer);
+            ants.push(ant);
+        }
+     
+        player = this.physics.add.sprite(128, 128, "ant");
         this.player = player;
         player.maxWalkSpeed = 30;
         this.anims.create({
             key: 'up',
             frames: this.anims.generateFrameNumbers('ant', { start: 0, end: 61 }),
-            frameRate: 120,
+            frameRate: 5,
             repeat: -1
         });
         this.physics.add.collider(player, worldLayer);
@@ -98,14 +110,29 @@ const init = function(container) {
         this.level.create();
     }
 
-    function update() {
+    let timeSinceAgentUpdate = 0;
+
+    function update(time, delta) {
         if (!this.levelComplete && this.level.isComplete()) {
             var text = this.add.text(game.scale.width / 2, 10, "Level complete!", {'align': 'center'});
             text.setScrollFactor(0);
             this.levelComplete = true;
         }
 
-        player.agent.update(this, player);
+        timeSinceAgentUpdate += delta;
+        if (timeSinceAgentUpdate >= 1000) {
+            
+            ants.forEach(ant => {
+                args = [logger.print, ant.goto]; // TODO: this doesnt pass the goto method with "this" set to instance receiver...
+                ant.agent.update(game, ant.obj, args);
+            });
+
+            //args = [logger.print];
+            //player.agent.update(game, player, args);
+            
+            timeSinceAgentUpdate = 0;
+        }
+        
 
         // Normalize and scale the velocity so that player can't move faster along a diagonal
         player.body.velocity.normalize().scale(300);
@@ -119,8 +146,12 @@ const init = function(container) {
     var setAgent = function(name) {
         if (this.player.agent)
             this.player.agent.stop(this, player);
-
         this.currentAgentName = name;
+
+        ants.forEach(ant => {
+            ant.agent = new Agent.available[name](this);
+        });
+
         this.player.agent = new Agent.available[name](this);
         // this.player.agent.initialize();  // Already taken care of by constructor
         this.agentIndicator.setText("Agent: " + this.currentAgentName);
@@ -128,15 +159,20 @@ const init = function(container) {
 
     var setUserCode = function(code) {
         this.setAgent("programmable");
+
+        ants.forEach(ant => {
+            ant.agent.setUserCode(new Function('game', 'player', 'print', 'goto', code));
+        });
+
         var agent = this.player.agent;
-        agent.setUserCode(code);
+        agent.setUserCode(new Function('game', 'player', 'print', code));
     };
 
 
     var game_config = {
         type: Phaser.AUTO,
         width: 600,
-        height: 600,
+        height: 480,
         parent: container[0],
         physics: {
             default: 'arcade',

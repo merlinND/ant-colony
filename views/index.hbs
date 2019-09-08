@@ -1,6 +1,6 @@
 
 <div class="container-fluid  h-100" id="ants-app">
-    <h1>{{i18n "mainTitle"}}</h1>
+    {{!--<h1>{{i18n "mainTitle"}}</h1>--}}
     {{!-- <nav class="navbar navbar-light bg-light">
         <a class="navbar-brand" href="#">Ant Colony</a>
     </nav> --}}
@@ -24,7 +24,6 @@
 
                 <div class="tab-pane show active" id="nav-editor">
                     {{>code_editor}}
-
                     <div class="button-bar">
                         <button name="reset">{{i18n "editor.reset"}}</button>
                         <button name="play" class="bg-primary">{{i18n "editor.play"}}</button>
@@ -47,6 +46,7 @@
             <div class="tab-content">
                 <div class="tab-pane show active" id="nav-game">
                     {{>game_view}}
+                    {{>console}}
                 </div>
             </div>
         </div>

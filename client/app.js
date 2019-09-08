@@ -10,6 +10,9 @@ CodeMirrorPersist(CodeMirror)
 const sideScrollerPlayground = require("./sideScrollerPlayground.js")
 const topDownPlayground = require("./topDownPlayground.js")
 
+const logger = require("./logger.js");
+logger.init();
+
 const executeUserCode = function(user_code, editor) {
     clearCodeErrors(editor);
     try {
@@ -104,6 +107,7 @@ const initAntsApp = function(container) {
 
     $('button[name="play"]').on('click', function() {
         const userCode = editor.getValue();
+        logger.print("C'est parti...")
         game.setUserCode(userCode);
     })
     gameContainer.on('click', function() {

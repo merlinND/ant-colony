@@ -22,21 +22,19 @@ var ProgrammableAgent = new Class({
         this.clearUserCode();
     },
 
-    setUserCode: function (text) {
-        this.userCode = text;
-        this.userFunction = new Function('game', 'player', this.userCode);
+    setUserCode: function (func) {
+        this.userFunction = func;
     },
     clearUserCode: function () {
-        this.userCode = null;
         this.userFunction = null;
     },
 
-    update: function update(game, player) {
-        if (!this.userCode)
+    update: function update(game, player, args) {
+        if (!this.userFunction)
             return false;
 
         try {
-            this.userFunction(game, player);
+            this.userFunction(game, player, ...args);
         } catch (e) {
             // TODO: surface the error to the UI / code editor
             console.error(e);
