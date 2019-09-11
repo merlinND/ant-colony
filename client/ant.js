@@ -1,21 +1,22 @@
 const Phaser = require("phaser");
 const Class = Phaser.Class;
+const Playground = require("./topDownPlayground.js")
 
 var Ant = new Class({ // TODO can extend the Phaser object ? 
     initialize: function initialize(ant, game) {
        this.obj = ant;
        this.game = game;
+       this .obj.maxWalkSpeed = 30;
     },
 
-    goto: function goto(x,y) { // TODO: cannot pass func with "this" set to instance receiver ?
-        var newDirection = new Phaser.Math.Vector2(x - this.obj.x, y - this.obj.y);
-            var newDistance = newDirection.length();
-            if (newDistance < distance) {
-                distance = newDistance;
-                direction = newDirection;
-            }
-            direction.normalize().scale(this.obj.maxWalkSpeed);
-            this.obj.body.setVelocity(direction.x, direction.y);
+    goto: function goto(x,y) {
+        var direction = new Phaser.Math.Vector2(x - this.obj.x, y - this.obj.y);
+        var distance = direction.length();
+        var timeToPos = distance/(this.obj.maxWalkSpeed/1000);
+        this.game.physics.moveTo(this.obj,x,y,30);
+        if (timeToPos <= Playground.agentUpdatePeriod) {
+            this.game.time.delayedCall(timeToPos, function(){this.obj.body.reset(x,y)}, [], this);
+        }
     },
 });
 

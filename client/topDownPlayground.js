@@ -4,6 +4,8 @@ const Game = require('./game.js');
 const Ant = require("./ant.js");
 const logger = require("./logger.js");
 
+const agentUpdatePeriod = 1000;
+
 const init = function(container) {
     console.log('Initializing top-down playground (game only)');
 
@@ -60,7 +62,6 @@ const init = function(container) {
 
         for (let i = 0; i < 3; i++) {
             var ant = new Ant.Ant(this.physics.add.sprite(256, (i+1)*128, "ant"), this);
-            ant.maxWalkSpeed = 30;
             this.physics.add.collider(ant, worldLayer);
             ants.push(ant);
         }
@@ -120,10 +121,10 @@ const init = function(container) {
         }
 
         timeSinceAgentUpdate += delta;
-        if (timeSinceAgentUpdate >= 1000) {
+        if (timeSinceAgentUpdate >= agentUpdatePeriod) {
             
             ants.forEach(ant => {
-                args = [logger.print, ant.goto]; // TODO: this doesnt pass the goto method with "this" set to instance receiver...
+                args = [logger.print, ant.goto.bind(ant)];
                 ant.agent.update(game, ant.obj, args);
             });
 
@@ -209,3 +210,5 @@ const init = function(container) {
 module.exports = {
     init: init,
 }
+
+exports.agentUpdatePeriod = agentUpdatePeriod;
