@@ -1,6 +1,6 @@
 const Phaser = require("phaser");
 const Class = Phaser.Class;
-const Playground = require("./topDownPlayground.js")
+const Playground = require("./game.js")
 
 var Ant = new Class({ // TODO can extend the Phaser object ? 
     initialize: function initialize(ant, game) {

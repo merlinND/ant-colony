@@ -8,7 +8,7 @@ CodeMirrorPersist(CodeMirror)
 
 
 const sideScrollerPlayground = require("./sideScrollerPlayground.js")
-const topDownPlayground = require("./topDownPlayground.js")
+const topDownPlayground = require("./game.js")
 
 const logger = require("./logger.js");
 logger.init();
