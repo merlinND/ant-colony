@@ -9,9 +9,9 @@ const behaviors = {
 
 var Agent = new Class({
     initialize: function () {},
-    // Responsible for updating the player's state based on this agent's behavior. Called with game, player.
+    // Responsible for updating the ant's state based on this agent's behavior. Called with game, ant, args.
     update: function () {},
-    // Executed when this agent is deactivated. Called with game, player.
+    // Executed when this agent is deactivated. Called with game, ant.
     stop: function () {},
 });
 
@@ -29,12 +29,12 @@ var ProgrammableAgent = new Class({
         this.userFunction = null;
     },
 
-    update: function update(game, player, args) {
+    update: function update(game, ant, args) {
         if (!this.userFunction)
             return false;
 
         try {
-            this.userFunction(game, player, ...args);
+            this.userFunction(game, ant, ...args);
         } catch (e) {
             // TODO: surface the error to the UI / code editor
             console.error(e);
@@ -42,19 +42,19 @@ var ProgrammableAgent = new Class({
         }
     },
 
-    stop: function update(game, player) {
-        player.body.setAngularVelocity(0);
-        player.body.setVelocity(0, 0);
+    stop: function update(game, ant) {
+        ant.obj.body.setAngularVelocity(0);
+        ant.obj.body.setVelocity(0, 0);
     },
 });
 
 var GreedyAgent = new Class({
     Extends: ProgrammableAgent,
 
-    update: function (game, player) {
+    update: function (game, ant, args) {
         var level = game.level;
         if (level.isComplete()) {
-            player.body.setVelocity(0, 0);
+            ant.obj.body.setVelocity(0, 0);
             game.setAgent('rotating', RotatingAgent);
             return;
         }
@@ -65,7 +65,7 @@ var GreedyAgent = new Class({
         var distance = Infinity;
         level.items.forEach(function(item) {
             if (level.inventory.indexOf(item) >= 0) { return; }
-            var newDirection = new Phaser.Math.Vector2(item.x - player.x, item.y - player.y);
+            var newDirection = new Phaser.Math.Vector2(item.x - ant.obj.x, item.y - ant.obj.y);
             var newDistance = newDirection.length();
             if (newDistance < distance) {
                 distance = newDistance;
@@ -75,13 +75,13 @@ var GreedyAgent = new Class({
         });
         if (target) {
             // TODO: handle obstructions (path planning)
-            direction.normalize().scale(player.maxWalkSpeed);
-            player.body.setVelocity(direction.x, direction.y);
+            direction.normalize().scale(ant.obj.maxWalkSpeed);
+            ant.obj.body.setVelocity(direction.x, direction.y);
         }
     },
 
-    stop: function (game, player) {
-        player.body.setVelocity(0, 0);
+    stop: function (game, ant) {
+        ant.obj.body.setVelocity(0, 0);
     },
 });
 
@@ -95,16 +95,16 @@ var RotatingAgent = new Class({
         this.counter = this.maxAngularVelocity;
     },
 
-    update: function update(game, player) {
+    update: function update(game, ant, args) {
         if (this.counter < -this.maxAngularVelocity) {
             this.counter = this.maxAngularVelocity;
         }
-        player.body.setAngularVelocity(this.counter);
+        ant.obj.body.setAngularVelocity(this.counter);
         this.counter -= 1;
     },
 
-    stop: function update(game, player) {
-        player.body.setAngularVelocity(0);
+    stop: function update(game, ant) {
+        ant.obj.body.setAngularVelocity(0);
         this.counter = 0;
     },
 });
@@ -119,33 +119,33 @@ var KeyboardAgent = new Class({
         this.counter = this.maxAngularVelocity;
     },
 
-    update: function update(game, player) {
+    update: function update(game, ant, args) {
         const cursors = game.cursors;
 
         // Stop any previous movement from the last frame
-        player.body.setVelocity(0);
+        ant.obj.body.setVelocity(0);
 
         // Horizontal movement
         if (cursors.left.isDown) {
-            player.body.setVelocityX(-player.maxWalkSpeed);
-            player.anims.play('up', true);
+            ant.obj.body.setVelocityX(-ant.obj.maxWalkSpeed);
+            ant.obj.anims.play('up', true);
         } else if (cursors.right.isDown) {
-            player.body.setVelocityX(player.maxWalkSpeed);
-            player.anims.play('up', true);
+            ant.obj.body.setVelocityX(ant.obj.maxWalkSpeed);
+            ant.obj.anims.play('up', true);
         }
 
         // Vertical movement
         if (cursors.up.isDown) {
-            player.body.setVelocityY(-player.maxWalkSpeed);
-            player.anims.play('up', true);
+            ant.obj.body.setVelocityY(-ant.obj.maxWalkSpeed);
+            ant.obj.anims.play('up', true);
         } else if (cursors.down.isDown) {
-            player.body.setVelocityY(player.maxWalkSpeed);
-            player.anims.play('up', true);
+            ant.obj.body.setVelocityY(ant.obj.maxWalkSpeed);
+            ant.obj.anims.play('up', true);
         }
     },
 
-    stop: function update(game, player) {
-        player.body.setVelocity(0, 0);
+    stop: function update(game, ant) {
+        ant.obj.body.setVelocity(0, 0);
     },
 });
 

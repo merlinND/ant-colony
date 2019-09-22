@@ -9,7 +9,6 @@ const agentUpdatePeriod = 1000;
 const init = function(container) {
     console.log('Initializing top-down playground (game only)');
 
-    let player;
     let CurrentLevel = Game.levels.TEST1;
     let defaultAgentName = 'programmable';
 
@@ -32,7 +31,6 @@ const init = function(container) {
         window.level = this.level;
     }
 
-    var ants = [];
 
     function create () {
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -58,27 +56,21 @@ const init = function(container) {
         //   collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
         //   faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
         // });
-
+        this.ants = [];
 
         for (let i = 0; i < 3; i++) {
             var ant = new Ant.Ant(this.physics.add.sprite(256, (i+1)*128, "ant"), this);
             this.physics.add.collider(ant, worldLayer);
-            ants.push(ant);
+            ant.obj.setCollideWorldBounds(true);
+            this.ants.push(ant);
         }
      
-        player = this.physics.add.sprite(128, 128, "ant");
-        this.player = player;
-        player.maxWalkSpeed = 30;
         this.anims.create({
             key: 'up',
             frames: this.anims.generateFrameNumbers('ant', { start: 0, end: 61 }),
             frameRate: 5,
             repeat: -1
         });
-        this.physics.add.collider(player, worldLayer);
-
-        // For interactive debugging / introspection
-        window.player = player;
 
         // Initialize witht the default agent
         this.agentIndicator = this.add.text(10, 10, "Agent: ", {'align': 'left'});
@@ -100,15 +92,25 @@ const init = function(container) {
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.cameras.main.setDeadzone(150, 150);
         // this.cameras.main.setZoom(2);
-        this.cameras.main.startFollow(player, true);
+        this.cameras.main.startFollow(this.ants[0].obj, true);
 
-        player.setCollideWorldBounds(true);
 
         // TODO: figure out time scaling
         // this.scene.time.timeScale = 2;
         // this.time.timeScale = 4;
 
         this.level.create();
+
+        this.level.items.forEach(item => {
+            this.ants.forEach(ant => {
+                this.physics.add.overlap(ant.obj, item, function(a, b) {
+                    var picked = a;
+                    if (picked == ant.obj) { picked = b }
+                    ant.inventory.push(picked);
+                    picked.disableBody(true, true);
+                }, null, this);
+                });
+        });
     }
 
     let timeSinceAgentUpdate = 0;
@@ -123,50 +125,34 @@ const init = function(container) {
         timeSinceAgentUpdate += delta;
         if (timeSinceAgentUpdate >= agentUpdatePeriod) {
             
-            ants.forEach(ant => {
+            this.ants.forEach(ant => {
                 args = [logger.print, ant.goto.bind(ant)];
                 ant.agent.update(game, ant.obj, args);
             });
-
-            //args = [logger.print];
-            //player.agent.update(game, player, args);
             
             timeSinceAgentUpdate = 0;
         }
         
-
-        // Normalize and scale the velocity so that player can't move faster along a diagonal
-        player.body.velocity.normalize().scale(300);
-
-        var isMoving = player.body.velocity.length() > 0;
-        if (!isMoving) {
-            player.anims.stop();
-        }
     }
 
     var setAgent = function(name) {
-        if (this.player.agent)
-            this.player.agent.stop(this, player);
         this.currentAgentName = name;
 
-        ants.forEach(ant => {
+        this.ants.forEach(ant => {
+            if (ant.agent)
+                ant.agent.stop(this, ant);
             ant.agent = new Agent.available[name](this);
         });
 
-        this.player.agent = new Agent.available[name](this);
-        // this.player.agent.initialize();  // Already taken care of by constructor
         this.agentIndicator.setText("Agent: " + this.currentAgentName);
     };
 
     var setUserCode = function(code) {
         this.setAgent("programmable");
 
-        ants.forEach(ant => {
-            ant.agent.setUserCode(new Function('game', 'player', 'print', 'goto', code));
+        this.ants.forEach(ant => {
+            ant.agent.setUserCode(new Function('game', 'ant', 'print', 'goto', code));
         });
-
-        var agent = this.player.agent;
-        agent.setUserCode(new Function('game', 'player', 'print', code));
     };
 
 

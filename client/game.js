@@ -25,7 +25,6 @@ const TestLevel1 = new Class({
     },
 
     create: function create() {
-        this.inventory = [];
         this.items = [];
         // const positions = [[332, 100], [543, 64], [256, 460], [64, 680]];
         const positions = [[332, 100], [543, 64], [256, 120], [64, 64]];
@@ -34,18 +33,11 @@ const TestLevel1 = new Class({
             var pos = positions[i];
             var item = this.game.physics.add.sprite(pos[0], pos[1], "objective-item");
             this.items.push(item);
-
-            this.game.physics.add.overlap(this.game.player, item, function(a, b) {
-                var picked = a;
-                if (picked == this.game.player) { picked = b }
-                this.inventory.push(picked);
-                picked.disableBody(true, true);
-            }, null, this);
         }
     },
 
     isComplete: function isComplete() {
-        return this.inventory.length == this.items.length;
+        return false;
     },
 
 });

@@ -6,7 +6,8 @@ var Ant = new Class({ // TODO can extend the Phaser object ?
     initialize: function initialize(ant, game) {
        this.obj = ant;
        this.game = game;
-       this .obj.maxWalkSpeed = 30;
+       this.obj.maxWalkSpeed = 30;
+       this.inventory = [];
     },
 
     goto: function goto(x,y) {
