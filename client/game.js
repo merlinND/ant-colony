@@ -106,8 +106,7 @@ const init = function(container) {
         if (timeSinceAgentUpdate >= agentUpdatePeriod) {
             
             this.ants.forEach(ant => {
-                args = [logger.print, ant.goto.bind(ant)];
-                ant.agent.update(game, ant.obj, args);
+                ant.update(game);
             });
             
             timeSinceAgentUpdate = 0;
