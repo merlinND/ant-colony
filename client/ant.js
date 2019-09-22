@@ -3,10 +3,11 @@ const Class = Phaser.Class;
 const Playground = require("./game.js")
 
 var Ant = new Class({ // TODO can extend the Phaser object ? 
-    initialize: function initialize(ant, game) {
-       this.obj = ant;
+    initialize: function initialize(game, xPos, yPos) {
        this.game = game;
+       this.obj = game.physics.add.sprite(xPos, yPos, "ant");
        this.obj.maxWalkSpeed = 30;
+       this.obj.setScale(this.obj.scale/2);
        this.inventory = [];
     },
 

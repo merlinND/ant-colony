@@ -35,32 +35,13 @@ const init = function(container) {
     function create () {
         this.cursors = this.input.keyboard.createCursorKeys();
 
-        const map = this.make.tilemap({ key: "test-level" });
+        this.level.create();
 
-        const tileset = map.addTilesetImage("Terrain", "tiles");
-        this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-
-        // Parameters: layer name (or index) from Tiled, tileset, x, y
-        const backgroundLayer = map.createStaticLayer("background", tileset, 0, 0);
-        const worldLayer = map.createStaticLayer("world", tileset, 0, 0);
-        const aboveLayer = map.createStaticLayer("above", tileset, 0, 0);
-
-        // `collides` property must be set to true in Tiler for the relevant tiles.
-        worldLayer.setCollisionByProperty({ collides: true });
-
-        // Debug rendering
-        // const debugGraphics = this.add.graphics();
-        // debugGraphics.setAlpha(0.75);
-        // worldLayer.renderDebug(debugGraphics, {
-        //   tileColor: null, // Color of non-colliding tiles
-        //   collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-        //   faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
-        // });
         this.ants = [];
 
         for (let i = 0; i < 3; i++) {
-            var ant = new Ant.Ant(this.physics.add.sprite(256, (i+1)*128, "ant"), this);
-            this.physics.add.collider(ant, worldLayer);
+            var ant = new Ant.Ant(this, this.level.randomXPos(), this.level.randomYPos());
+            this.physics.add.collider(ant.obj, this.level.worldLayer);
             ant.obj.setCollideWorldBounds(true);
             this.ants.push(ant);
         }
@@ -89,7 +70,7 @@ const init = function(container) {
 
 
         // Camera configuration
-        this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+        this.cameras.main.setBounds(0, 0, this.level.map.widthInPixels, this.level.map.heightInPixels);
         this.cameras.main.setDeadzone(150, 150);
         // this.cameras.main.setZoom(2);
         this.cameras.main.startFollow(this.ants[0].obj, true);
@@ -99,7 +80,6 @@ const init = function(container) {
         // this.scene.time.timeScale = 2;
         // this.time.timeScale = 4;
 
-        this.level.create();
 
         this.level.items.forEach(item => {
             this.ants.forEach(ant => {
