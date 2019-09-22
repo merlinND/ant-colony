@@ -1,6 +1,6 @@
 const Phaser = require("phaser");
 const Agent = require("./agent.js");
-const Game = require('./game.js');
+const Level = require('./level.js');
 const Ant = require("./ant.js");
 const logger = require("./logger.js");
 
@@ -9,7 +9,7 @@ const agentUpdatePeriod = 1000;
 const init = function(container) {
     console.log('Initializing top-down playground (game only)');
 
-    let CurrentLevel = Game.levels.TEST1;
+    let CurrentLevel = Level.levels.TEST1;
     let defaultAgentName = 'programmable';
 
     function preload () {
