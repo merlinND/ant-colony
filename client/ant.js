@@ -3,7 +3,7 @@ const Class = Phaser.Class;
 const Playground = require("./game.js");
 const logger = require("./logger.js");
 
-var Ant = new Class({ // TODO can extend the Phaser object ? 
+var Ant = new Class({ // TODO can extend the Phaser object ?
     initialize: function initialize(game, xPos, yPos) {
        this.game = game;
        this.obj = game.physics.add.sprite(xPos, yPos, "ant");
@@ -14,7 +14,7 @@ var Ant = new Class({ // TODO can extend the Phaser object ?
 
     update: function update(game) {
         args = [logger.print, this.goto.bind(this)];
-        this.agent.update(game, this.obj, args);
+        this.agent.update(game, this, args);
     },
 
     goto: function goto(x,y) {

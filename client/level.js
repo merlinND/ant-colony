@@ -52,19 +52,50 @@ const TestLevel1 = new Class({
         //   faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
         // });
 
+        // Spawn pickable items (e.g. food)
+        var positions = [];
+        this.worldLayer.filterTiles(function (t) {
+            if (t.properties.food) {
+                positions.push([ (t.x + 0.5) * t.width,
+                                 (t.y + 0.5) * t.height ]);
+                t.setVisible(false);
+                t.setCollision(false);
+            }
+        });
+        if (!positions) {
+            // Some hardcoded positions for testing
+            // positions = [[332, 100], [543, 64], [256, 460], [64, 680]];
+            positions = [[332, 100], [543, 64], [256, 120], [64, 64]];
+        }
+
         this.items = [];
-        // const positions = [[332, 100], [543, 64], [256, 460], [64, 680]];
-        const positions = [[332, 100], [543, 64], [256, 120], [64, 64]];
         for (var i = 0; i < positions.length; ++i) {
             // var item = this.game.physics.add.sprite(300 + 32 * i, 100 + 32 * i, "objective-item");
             var pos = positions[i];
             var item = this.game.physics.add.sprite(pos[0], pos[1], "objective-item");
+            item.isPicked = false;
             this.items.push(item);
         }
+
+        // Find ant spawn locations
+        var spawns = [];
+        this.worldLayer.filterTiles(function (t) {
+            if (t.properties.spawn) {
+                spawns.push(t);
+                t.setVisible(false);
+                t.setCollision(false);
+            }
+        });
+        this.spawns = spawns;
     },
 
     isComplete: function isComplete() {
-        return false;
+        // Level is complete when all objects have been picked
+        for (var i = 0; i < this.items.length; ++i) {
+            if (!this.items[i].isPicked)
+                return false;
+        }
+        return true;
     },
 
     randomXPos: function randomXPos() {

@@ -13,7 +13,8 @@ const init = function(container) {
     let defaultAgentName = 'programmable';
 
     function preload () {
-        this.load.tilemapTiledJSON('test-level', 'maps/test.json');
+        // this.load.tilemapTiledJSON('test-level', 'maps/test.json');
+        this.load.tilemapTiledJSON('test-level', 'maps/level-1.json');
         this.load.image('tiles', 'images/terrain.png');
 
         this.load.spritesheet('ant',
@@ -37,15 +38,27 @@ const init = function(container) {
 
         this.level.create();
 
+        // Spawn ants (either specified by the map spawn points or at random)
         this.ants = [];
-
-        for (let i = 0; i < 3; i++) {
-            var ant = new Ant.Ant(this, this.level.randomXPos(), this.level.randomYPos());
+        var antPositions = [];
+        if (this.level.spawns) {
+            for (let i = 0; i < this.level.spawns.length; i++) {
+                let tile = this.level.spawns[i];
+                antPositions.push([ (tile.x + 0.5) * tile.width,
+                                    (tile.y + 0.5) * tile.height ]);
+            }
+        } else {
+            for (let i = 0; i < 3; i++) {
+                antPositions.push([this.level.randomXPos(), this.level.randomYPos()]);
+            }
+        }
+        for (let i = 0; i < antPositions.length; i++) {
+            var ant = new Ant.Ant(this, antPositions[i][0], antPositions[i][1]);
             this.physics.add.collider(ant.obj, this.level.worldLayer);
             ant.obj.setCollideWorldBounds(true);
             this.ants.push(ant);
         }
-     
+
         this.anims.create({
             key: 'up',
             frames: this.anims.generateFrameNumbers('ant', { start: 0, end: 61 }),
@@ -80,16 +93,17 @@ const init = function(container) {
         // this.scene.time.timeScale = 2;
         // this.time.timeScale = 4;
 
-
+        // Collision rule with pickable items
         this.level.items.forEach(item => {
             this.ants.forEach(ant => {
                 this.physics.add.overlap(ant.obj, item, function(a, b) {
                     var picked = a;
                     if (picked == ant.obj) { picked = b }
                     ant.inventory.push(picked);
+                    picked.isPicked = true;
                     picked.disableBody(true, true);
                 }, null, this);
-                });
+            });
         });
     }
 
@@ -104,14 +118,14 @@ const init = function(container) {
 
         timeSinceAgentUpdate += delta;
         if (timeSinceAgentUpdate >= agentUpdatePeriod) {
-            
+
             this.ants.forEach(ant => {
                 ant.update(game);
             });
-            
+
             timeSinceAgentUpdate = 0;
         }
-        
+
     }
 
     var setAgent = function(name) {
@@ -165,6 +179,10 @@ const init = function(container) {
 
 
     var game = new Phaser.Game(game_config);
+    game.setAgent = function (agentName) {
+        // TODO: support multiple scenes.
+        this.scene.scenes[0].setAgent(agentName);
+    };
     game.setUserCode = function (code) {
         // TODO: support multiple scenes.
         this.scene.scenes[0].setUserCode(code);
