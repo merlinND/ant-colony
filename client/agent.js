@@ -1,5 +1,6 @@
 const Phaser = require("phaser");
 const Class = Phaser.Class;
+const editor = require('./editor.js');
 
 // TODO: decide on a nice agent behavior architecture (single function, state enum, higher-level)?
 const behaviors = {
@@ -32,12 +33,12 @@ var ProgrammableAgent = new Class({
     update: function update(game, ant, args) {
         if (!this.userFunction)
             return false;
+        editor.clearCodeErrors(game.codeEditor);
 
         try {
             this.userFunction(game, ant, ...args);
         } catch (e) {
-            // TODO: surface the error to the UI / code editor
-            console.error(e);
+            editor.showCodeError(game.codeEditor, e);
             this.clearUserCode();
         }
     },

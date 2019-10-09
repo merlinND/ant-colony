@@ -3,86 +3,18 @@ require('bootstrap');
 
 const CodeMirror = require("codemirror");
 require("codemirror/mode/javascript/javascript");
-var CodeMirrorPersist = require("codemirror-persist")
-CodeMirrorPersist(CodeMirror)
+var CodeMirrorPersist = require("codemirror-persist");
+CodeMirrorPersist(CodeMirror);
 
 
-const sideScrollerPlayground = require("./sideScrollerPlayground.js")
-const topDownPlayground = require("./game.js")
-
+const sideScrollerPlayground = require("./sideScrollerPlayground.js");
+const topDownPlayground = require("./game.js");
 const logger = require("./logger.js");
-logger.init();
-
-const executeUserCode = function(user_code, editor) {
-    clearCodeErrors(editor);
-    try {
-        // TODO: no need for eval if we already have wrapped the function?
-        eval(user_code);
-    } catch (e) {
-        showCodeError(editor, e);
-    }
-};
-
-const clearCodeErrors = function(editor) {
-    if (!editor.widgets)
-        return;
-
-    for (var i = 0; i < editor.widgets.length; ++i) {
-        editor.removeLineWidget(editor.widgets[i]);
-    }
-    editor.widgets.length = 0;
-}
-
-const showCodeError = function(editor, exception) {
-    if (!editor.widgets)
-        editor.widgets = []
-
-    // Find offending line in user code
-    // TODO: make this more robust and work cross-browser
-    const message = exception.message;
-    const lineRegex = /eval .+ <anonymous>:(\d+)/;
-    var exceptionLine;
-    try {
-        var matches = exception.stack.match(lineRegex);
-        if (matches.length > 1) {
-            exceptionLine = parseInt(matches[1]);
-        } else {
-            exceptionLine = 0;
-        }
-    } catch (e) {
-        exceptionLine = 0;
-    }
-
-    console.log('Code error at line ' + exceptionLine + ': ' + message);
-
-    editor.operation(function(){
-        if (!exception) return;
-
-        var msg = document.createElement("div");
-        var icon = msg.appendChild(document.createElement("span"));
-        icon.innerHTML = "Error: ";
-        icon.className = "code-error-icon";
-        msg.appendChild(document.createTextNode(message));
-        msg.className = "code-error text-danger";
-
-        var widget = editor.addLineWidget(exceptionLine - 1, msg, {
-            coverGutter: false, noHScroll: true
-        });
-        editor.widgets.push(widget);
-    });
-
-    // TODO: consider scrolling to first error
-    // var info = editor.getScrollInfo();
-    // var after = editor.charCoords({line: editor.getCursor().line + 1, ch: 0}, "local").top;
-    // if (info.top + info.clientHeight < after)
-    //   editor.scrollTo(null, after - info.clientHeight + 3);
-}
-
-
 
 
 const initAntsApp = function(container) {
     console.log('Initializing ants app (editor + game)');
+
     var editorTarget = container.find(".code-editor textarea")[0];
     var editor = CodeMirror.fromTextArea(editorTarget, {
         mode: "javascript",
@@ -99,17 +31,20 @@ const initAntsApp = function(container) {
     });
 
     // For debugging
-    window.code_editor = editor;
+    window.codeEditor = editor;
 
     // Initialize game engine
     // TODO: Refactor actual game away from "playground" file.
     var gameContainer = container.find(".game-view");
     var game = topDownPlayground.init(gameContainer);
+    game.codeEditor = editor;
 
     $('button[name="play"]').on('click', function() {
         const userCode = editor.getValue();
-        logger.print("C'est parti...")
+        logger.clear();
+        logger.print("C'est parti...");
         game.setUserCode(userCode);
+        // TODO: reset state or disable button when it is running?
     })
     gameContainer.on('click', function() {
         game.input.enabled = true;
@@ -128,10 +63,11 @@ const initAntsApp = function(container) {
 
 
 $(function() {
+    logger.init();
+
     $('.instructions button[name="begin"]').on('click', function() {
         $('#nav-editor-tab').tab('show');
     })
-
 
     var container = $('#ants-app');
     if (container.length) {
