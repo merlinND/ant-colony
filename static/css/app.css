@@ -70,6 +70,14 @@ body, html {
 .editor-col .CodeMirror {
     height: 100%;
 }
+.editor-col .CodeMirror .code-error-icon {
+    display: inline-block;
+    background: #dc3545;
+    color: white;
+    border-radius: 5px;
+    padding: 2px 5px;
+    margin-right: 5px;
+}
 .editor-col button {
     font-size: 1.2em;
     text-align: center;
