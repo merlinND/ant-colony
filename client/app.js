@@ -16,6 +16,7 @@ logger.init();
 const executeUserCode = function(user_code, editor) {
     clearCodeErrors(editor);
     try {
+        // TODO: no need for eval if we already have wrapped the function?
         eval(user_code);
     } catch (e) {
         showCodeError(editor, e);

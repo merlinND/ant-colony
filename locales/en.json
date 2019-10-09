@@ -1,9 +1,10 @@
 {
-    "mainTitle": "Ant Colony",
-    "instructions.begin": "Begin",
-    "instructions": "Instructions",
-    "editor": "Editor",
-    "editor.reset": "Reset",
-    "editor.play": "Play",
-    "game": "Game"
+	"mainTitle": "Ant Colony",
+	"instructions.begin": "Begin",
+	"instructions": "Instructions",
+	"editor": "Editor",
+	"editor.reset": "Reset",
+	"editor.play": "Play",
+	"game": "Game",
+	"instructions.todo": "In **this** level, this is new"
 }

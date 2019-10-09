@@ -5,5 +5,6 @@
     "editor": "Éditeur",
     "editor.reset": "Réinitialiser",
     "editor.play": "Jouer",
-    "game": "Jeu"
+    "game": "Jeu",
+    "instructions.todo": "Dans **ce** niveau, nouveau texte nouveau nouveau"
 }

@@ -1,6 +1,7 @@
 const express = require('express')
 const exphbs  = require('express-handlebars');
 const i18n    = require('i18n');
+const markdownHelper = require('helper-markdown');
 
 // ----- Configuration
 const app = express()
@@ -11,7 +12,7 @@ i18n.configure({
     locales: ['en','fr'],
     cookie: 'locale',
     directory: __dirname + '/locales',
-    defaultLocale: 'en',
+    defaultLocale: 'fr',
 });
 
 app.engine('.hbs', exphbs({
@@ -23,6 +24,7 @@ app.engine('.hbs', exphbs({
         __n: function() {
             return i18n.__n.apply(this, arguments);
         },
+        markdown: markdownHelper,
     },
 }));
 app.set('view engine', '.hbs');
