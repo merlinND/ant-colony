@@ -14,6 +14,9 @@ var Agent = new Class({
     update: function () {},
     // Executed when this agent is deactivated. Called with game, ant.
     stop: function () {},
+
+    // Returns the interval at which the update function should be called (millisecond)
+    updatePeriod: function () { return 1000; },
 });
 
 var ProgrammableAgent = new Class({
@@ -53,19 +56,19 @@ var GreedyAgent = new Class({
     Extends: ProgrammableAgent,
 
     update: function (game, ant, args) {
-        var level = game.level;
+        scene = args[2];
+        var level = scene.level;
         if (level.isComplete()) {
             ant.obj.body.setVelocity(0, 0);
             game.setAgent('rotating', RotatingAgent);
             return;
         }
 
-        // TODO: this assumes a certain structure of the level -> detect subclass / level type?
         var target = null;
         var direction;
         var distance = Infinity;
         level.items.forEach(function(item) {
-            if (level.inventory.indexOf(item) >= 0) { return; }
+            if (item.isPicked || ant.inventory.indexOf(item) >= 0) { return; }
             var newDirection = new Phaser.Math.Vector2(item.x - ant.obj.x, item.y - ant.obj.y);
             var newDistance = newDirection.length();
             if (newDistance < distance) {
@@ -115,32 +118,30 @@ var KeyboardAgent = new Class({
 
     initialize: function Agent() {
         this.behavior = behaviors.IDLE;
-
-        this.maxAngularVelocity = 90;
-        this.counter = this.maxAngularVelocity;
     },
 
     update: function update(game, ant, args) {
-        const cursors = game.cursors;
+        const scene = args[2];
+        const cursors = scene.cursors;
 
         // Stop any previous movement from the last frame
         ant.obj.body.setVelocity(0);
 
         // Horizontal movement
         if (cursors.left.isDown) {
-            ant.obj.body.setVelocityX(-ant.obj.maxWalkSpeed);
+            ant.obj.body.setVelocityX(-3 * ant.obj.maxWalkSpeed);
             ant.obj.anims.play('up', true);
         } else if (cursors.right.isDown) {
-            ant.obj.body.setVelocityX(ant.obj.maxWalkSpeed);
+            ant.obj.body.setVelocityX(3 * ant.obj.maxWalkSpeed);
             ant.obj.anims.play('up', true);
         }
 
         // Vertical movement
         if (cursors.up.isDown) {
-            ant.obj.body.setVelocityY(-ant.obj.maxWalkSpeed);
+            ant.obj.body.setVelocityY(-3 * ant.obj.maxWalkSpeed);
             ant.obj.anims.play('up', true);
         } else if (cursors.down.isDown) {
-            ant.obj.body.setVelocityY(ant.obj.maxWalkSpeed);
+            ant.obj.body.setVelocityY(3 * ant.obj.maxWalkSpeed);
             ant.obj.anims.play('up', true);
         }
     },
@@ -148,6 +149,8 @@ var KeyboardAgent = new Class({
     stop: function update(game, ant) {
         ant.obj.body.setVelocity(0, 0);
     },
+
+    updatePeriod: function () { return 1; },
 });
 
 

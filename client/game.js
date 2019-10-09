@@ -4,8 +4,6 @@ const Level = require('./level.js');
 const Ant = require("./ant.js");
 const logger = require("./logger.js");
 
-const agentUpdatePeriod = 1000;
-
 const init = function(container) {
     console.log('Initializing top-down playground (game only)');
 
@@ -28,7 +26,7 @@ const init = function(container) {
         this.levelComplete = false;
 
         // For interactive debugging / introspection
-        window.game = this;
+        window.scene = this;
         window.level = this.level;
     }
 
@@ -107,8 +105,6 @@ const init = function(container) {
         });
     }
 
-    let timeSinceAgentUpdate = 0;
-
     function update(time, delta) {
         if (!this.levelComplete && this.level.isComplete()) {
             var text = this.add.text(game.scale.width / 2, 10, "Level complete!", {'align': 'center'});
@@ -116,15 +112,9 @@ const init = function(container) {
             this.levelComplete = true;
         }
 
-        timeSinceAgentUpdate += delta;
-        if (timeSinceAgentUpdate >= agentUpdatePeriod) {
-
-            this.ants.forEach(ant => {
-                ant.update(game);
-            });
-
-            timeSinceAgentUpdate = 0;
-        }
+        this.ants.forEach(ant => {
+            ant.update(game, delta);
+        });
 
     }
 
@@ -144,7 +134,7 @@ const init = function(container) {
         this.setAgent("programmable");
 
         this.ants.forEach(ant => {
-            ant.agent.setUserCode(new Function('game', 'ant', 'print', 'goto', code));
+            ant.agent.setUserCode(new Function('game', 'ant', 'print', 'goto', 'scene', code));
         });
     };
 
@@ -193,5 +183,3 @@ const init = function(container) {
 module.exports = {
     init: init,
 }
-
-exports.agentUpdatePeriod = agentUpdatePeriod;

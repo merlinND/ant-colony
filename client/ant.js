@@ -4,16 +4,23 @@ const Playground = require("./game.js");
 const logger = require("./logger.js");
 
 var Ant = new Class({ // TODO can extend the Phaser object ?
-    initialize: function initialize(game, xPos, yPos) {
-       this.game = game;
-       this.obj = game.physics.add.sprite(xPos, yPos, "ant");
+    initialize: function initialize(scene, xPos, yPos) {
+       this.scene = scene;
+       this.obj = scene.physics.add.sprite(xPos, yPos, "ant");
        this.obj.maxWalkSpeed = 30;
        this.obj.setScale(this.obj.scale/2);
        this.inventory = [];
+       this.timeSinceUpdate = 0;
     },
 
-    update: function update(game) {
-        args = [logger.print, this.goto.bind(this)];
+    update: function update(game, delta) {
+        if (this.timeSinceUpdate < this.agent.updatePeriod()) {
+            this.timeSinceUpdate += delta;
+            return;
+        }
+        this.timeSinceUpdate = 0;
+
+        args = [logger.print, this.goto.bind(this), this.scene];
         this.agent.update(game, this, args);
     },
 
@@ -21,9 +28,9 @@ var Ant = new Class({ // TODO can extend the Phaser object ?
         var direction = new Phaser.Math.Vector2(x - this.obj.x, y - this.obj.y);
         var distance = direction.length();
         var timeToPos = distance/(this.obj.maxWalkSpeed/1000);
-        this.game.physics.moveTo(this.obj,x,y,30);
+        this.scene.physics.moveTo(this.obj,x,y,30);
         if (timeToPos <= Playground.agentUpdatePeriod) {
-            this.game.time.delayedCall(timeToPos, function(){this.obj.body.reset(x,y)}, [], this);
+            this.scene.time.delayedCall(timeToPos, function(){this.obj.body.reset(x,y)}, [], this);
         }
     },
 });
