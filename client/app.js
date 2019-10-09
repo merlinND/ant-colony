@@ -30,14 +30,15 @@ const initAntsApp = function(container) {
         persist: true // enable buffer persistence
     });
 
-    // For debugging
-    window.codeEditor = editor;
 
     // Initialize game engine
     // TODO: Refactor actual game away from "playground" file.
     var gameContainer = container.find(".game-view");
     var game = topDownPlayground.init(gameContainer);
     game.codeEditor = editor;
+    // For debugging
+    window.codeEditor = editor;
+    window.game = game;
 
     $('button[name="play"]').on('click', function() {
         const userCode = editor.getValue();
@@ -46,17 +47,22 @@ const initAntsApp = function(container) {
         game.setUserCode(userCode);
         // TODO: reset state or disable button when it is running?
     })
-    gameContainer.on('click', function() {
-        game.input.enabled = true;
-    });
-    gameContainer.on('mouseenter', function() {
-        game.input.enabled = true;
-    });
-    gameContainer.on('mouseleave', function() {
-        game.input.enabled = false;
 
+    // Only let Phaser capture inputs when canvas is really focused
+    game.input.keyboard.enabled = false;
+    gameContainer.on('click', function() {
+        $(":focus").blur();
+        game.input.keyboard.enabled = true;
     });
-    game.input.enabled = false;
+    gameContainer.on('blur', function() {
+        game.input.keyboard.enabled = false;
+    });
+    // gameContainer.on('mouseenter', function() {
+    //     game.input.keyboard.enabled = true;
+    // });
+    // gameContainer.on('mouseleave', function() {
+    //     game.input.keyboard.enabled = false;
+    // });
 
     return editor;
 }

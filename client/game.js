@@ -152,9 +152,9 @@ const init = function(container) {
             }
         },
         input: {
-            keyboard: {
-                target: container[0],
-            },
+            // keyboard: {
+            //     target: container[0],
+            // },
         },
         scene: {
             preload: preload,
