@@ -23,6 +23,31 @@ For the first time, trigger a compilation & server start by changing and saving 
 
 TODO: there is most likely a better way to do this
 
+## Levels
+
+### Level 1
+
+Introduction to the framework, just run the provided code.
+
+### Level 2
+
+Introduction to functions and variables:
+
+- receive several arguments
+- compute euclidean distance and return it
+- could show that if they get it wrong, behavior changes (e.g. going to furthest food instead of closest)
+
+### Level 3
+
+Introduction to conditions: receive a food item with several properties: age, poison. Should return true only if the food item is edible.
+
+### Level 4
+
+Introduction to loops: return the closest food in given list of foods (keep track of minimum).
+
+### Level 5
+
+Loops and conditions: call your `is_edible` function to only return the closest that is edible.
 
 
 ## Credits
