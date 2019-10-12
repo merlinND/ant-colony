@@ -2,12 +2,6 @@ const Phaser = require("phaser");
 const Class = Phaser.Class;
 const editor = require('./editor.js');
 
-// TODO: decide on a nice agent behavior architecture (single function, state enum, higher-level)?
-const behaviors = {
-    IDLE: 'idle',
-    MOVING: 'moving',
-}
-
 var Agent = new Class({
     initialize: function () {},
     // Responsible for updating the ant's state based on this agent's behavior. Called with game, ant, args.
@@ -93,8 +87,6 @@ var RotatingAgent = new Class({
     Extends: Agent,
 
     initialize: function Agent() {
-        this.behavior = behaviors.IDLE;
-
         this.maxAngularVelocity = 90;
         this.counter = this.maxAngularVelocity;
     },
@@ -117,7 +109,6 @@ var KeyboardAgent = new Class({
     Extends: Agent,
 
     initialize: function Agent() {
-        this.behavior = behaviors.IDLE;
     },
 
     update: function update(game, ant, args) {
