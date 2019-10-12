@@ -26,12 +26,16 @@ module.exports = function(grunt) {
               tasks:  [ 'express:dev' ],
               options: {
                 // for grunt-contrib-watch v0.5.0+, "nospawn: true" for lower versions. Without this option specified express won't be reloaded
-                spawn: false
+                spawn: false,
+                atBegin: true,
               },
             },
             browserify: {
               files:  [ 'client/**/*.js' ],
               tasks:  [ 'browserify' ],
+              options: {
+                atBegin: true,
+              }
             },
             // tasks: ['browserify']
         },
