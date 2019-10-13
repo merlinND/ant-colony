@@ -41,12 +41,17 @@ const initAntsApp = function(container) {
     window.game = game;
 
     $('button[name="play"]').on('click', function() {
+        this.disabled = true;
         const userCode = editor.getValue();
         logger.clear();
         logger.print("C'est parti...");
         game.setUserCode(userCode);
-        // TODO: reset state or disable button when it is running?
-    })
+
+    });
+    $('button[name="reset"]').on('click', function() {
+        window.location.reload();
+    });
+
 
     // Only let Phaser capture inputs when canvas is really focused
     game.input.keyboard.enabled = false;

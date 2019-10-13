@@ -11,6 +11,7 @@ body, html {
 
 .container-fluid {
     /*background-color: #ccc;*/
+    margin-top: 5px;
 }
 .container-fluid > .row {
     /*background-color: #ddd;*/
@@ -23,6 +24,7 @@ body, html {
     border-bottom: 1px solid #dee2e6;
 }
 
+button:disabled
 
 /*
  ___           _                   _   _
@@ -90,6 +92,11 @@ body, html {
 }
 .editor-col button:focus {
     outline: 0;
+}
+.editor-col button:disabled {
+    color: #fff !important;
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
 }
 .editor-col button[name="play"] {
     width: 4em;

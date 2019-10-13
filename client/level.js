@@ -8,6 +8,8 @@ const GameLevel = new Class({
         this.game = game;
     },
 
+    getName: function() { return null; },
+
     // Load level-specific assets, if necessary.
     preload: function() {},
 
@@ -28,6 +30,8 @@ const GameLevel = new Class({
 
 const TestLevel1 = new Class({
     Extends: GameLevel,
+
+    getName: function() { return "Test level 1"; },
 
     preload: function preload() {
         this.game.load.image('objective-item', 'images/fruit.png');
