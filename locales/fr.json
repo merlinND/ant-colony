@@ -1,10 +1,17 @@
 {
     "mainTitle": "Ant Colony",
-    "instructions.begin": "Commencer",
-    "instructions": "Instructions",
-    "editor": "Éditeur",
-    "editor.reset": "Réinitialiser",
-    "editor.play": "Jouer",
+    "instructions": {
+        "title": "Instructions",
+        "begin": "Commencer"
+    },
+    "editor": {
+        "title": "Éditeur",
+        "reset": "Réinitialiser",
+        "play": "Jouer"
+    },
     "game": "Jeu",
-    "instructions.todo": "Dans **ce** niveau, nouveau texte nouveau nouveau"
+    "level1": {
+        "instructions": "Dans **ce** niveau, ...",
+        "starter_code": "const distance_euclidienne = function(fourmi, objet) {\n    // Ton code ici!\n};\nreturn distance_euclidienne;"
+    }
 }

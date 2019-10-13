@@ -11,25 +11,25 @@
         <div class="col editor-col">
             <nav>
                 <div class="nav nav-tabs" role="tablist">
-                    <a class="nav-item nav-link" id="nav-instructions-tab" data-toggle="tab" href="#nav-instructions" role="tab">{{i18n "instructions"}}</a>
+                    <a class="nav-item nav-link" id="nav-instructions-tab" data-toggle="tab" href="#nav-instructions" role="tab">{{i18n "instructions.title"}}</a>
 
-                    <a class="nav-item nav-link active" id="nav-editor-tab" data-toggle="tab" href="#nav-editor" role="tab">{{i18n "editor"}}</a>
+                    <a class="nav-item nav-link active" id="nav-editor-tab" data-toggle="tab" href="#nav-editor" role="tab">{{i18n "editor.title"}}</a>
                 </div>
             </nav>
 
             <div class="tab-content">
                 <div class="tab-pane" id="nav-instructions">
-                    {{>instructions}}
+{{>instructions}}
                 </div>
 
                 <div class="tab-pane show active" id="nav-editor">
-                    {{>code_editor}}
+{{>code_editor}}
                     <div class="button-bar">
                         <button name="reset">{{i18n "editor.reset"}}</button>
                         <button name="play" class="bg-primary">{{i18n "editor.play"}}</button>
-                        <button name="ff-2">x2</button>
-                        <button name="ff-5">x5</button>
-                        <button name="ff-10">x10</button>
+                        {{!-- <button name="ff-2">x2</button> --}}
+                        {{!-- <button name="ff-5">x5</button> --}}
+                        {{!-- <button name="ff-10">x10</button> --}}
                     </div>
                 </div>
             </div>
@@ -45,8 +45,8 @@
 
             <div class="tab-content">
                 <div class="tab-pane show active" id="nav-game">
-                    {{>game_view}}
-                    {{>console}}
+{{>game_view}}
+{{>console}}
                 </div>
             </div>
         </div>

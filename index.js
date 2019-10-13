@@ -13,14 +13,26 @@ i18n.configure({
     cookie: 'locale',
     directory: __dirname + '/locales',
     defaultLocale: 'fr',
+    updateFiles: false,
+    objectNotation: true,
+    // TODO: what is this used for?
+    indent: "\t",
 });
 
 app.engine('.hbs', exphbs({
     extname: 'hbs',
     helpers: {
         i18n: function() {
-            return i18n.__.apply(this,arguments);
+            if (!arguments[0]) {
+                console.error(arguments);
+                return;
+            }
+            return i18n.__.apply(this, arguments);
         },
+        // i18nVar: function() {
+        //     console.log(arguments);
+        //     return i18n.__.apply(this, arguments);
+        // },
         __n: function() {
             return i18n.__n.apply(this, arguments);
         },
@@ -44,13 +56,18 @@ app.use('/favicon.ico', express.static(__dirname + '/static/images/favicon.ico')
 
 // ----- Routes
 app.get('/', (req, res) => {
-    res.render('index', { })
+    // TODO: get level name from route
+    const levelName = 'level1';
+    res.render('index', {
+        'levelStarterCode': levelName + ".starter_code",
+        'levelInstructions': levelName + ".instructions",
+    });
 })
 app.get('/top-down-playground', (req, res) => {
-    res.render('playground', { containerId: 'top-down-playground' })
+    res.render('playground', { containerId: 'top-down-playground' });
 })
 app.get('/side-scroller-playground', (req, res) => {
-    res.render('playground', { containerId: 'side-scroller-playground' })
+    res.render('playground', { containerId: 'side-scroller-playground' });
 })
 
 

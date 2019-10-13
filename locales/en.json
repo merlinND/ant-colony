@@ -1,10 +1,17 @@
 {
 	"mainTitle": "Ant Colony",
-	"instructions.begin": "Begin",
-	"instructions": "Instructions",
-	"editor": "Editor",
-	"editor.reset": "Reset",
-	"editor.play": "Play",
+	"instructions": {
+	    "title": "Instructions",
+        "begin": "Begin"
+    },
+	"editor": {
+        "title": "Editor",
+    	"reset": "Reset",
+    	"play": "Play"
+    },
 	"game": "Game",
-	"instructions.todo": "In **this** level, this is new"
+	"level1": {
+        "instructions": "In **this** level, ...",
+        "starter_code": "const euclidian_distance = function(ant, obj) {\n    // Your code here!\n};\nreturn euclidian_distance;"
+    }
 }
