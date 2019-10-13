@@ -50,6 +50,21 @@ Introduction to loops: return the closest food in given list of foods (keep trac
 Loops and conditions: call your `is_edible` function to only return the closest that is edible.
 
 
+## Deployment
+
+On an Ubuntu 16.04 web server:
+
+```
+sudo apt-get install npm
+sudo npm install -g pm2
+
+cd /var/www
+git clone --recursive git@github.com:merlinND/ant-colony.git
+cd ant-colony
+npm install
+pm2 start index.js
+```
+
 ## Credits
 
 - Ant spite & animation by DudeMan on [opengameart.org](https://opengameart.org/content/walking-ant-with-parts-and-rigged-spriter-file)
