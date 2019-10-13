@@ -27,17 +27,23 @@ var ProgrammableAgent = new Class({
         this.userFunction = null;
     },
 
-    update: function update(game, ant, args) {
-        if (!this.userFunction)
+    tryRunningFunction: function(f, game, ant, args) {
+        if (!f)
             return false;
         editor.clearCodeErrors(game.codeEditor);
 
         try {
-            this.userFunction(game, ant, ...args);
+            f(game, ant, ...args);
         } catch (e) {
             editor.showCodeError(game.codeEditor, e);
             this.clearUserCode();
+            return false;
         }
+        return true;
+    },
+
+    update: function update(game, ant, args) {
+        this.tryRunningFunction(this.userFunction, game, ant, args);
     },
 
     stop: function update(game, ant) {
@@ -50,7 +56,7 @@ var GreedyAgent = new Class({
     Extends: ProgrammableAgent,
 
     update: function (game, ant, args) {
-        scene = args[2];
+        const scene = args[2];
         var level = scene.level;
         if (level.isComplete()) {
             ant.obj.body.setVelocity(0, 0);
@@ -152,5 +158,7 @@ module.exports = {
         'rotating': RotatingAgent,
         'keyboard': KeyboardAgent,
         'greedy': GreedyAgent,
+        /// Agent provided by the level
+        'level': null,
     }
 }

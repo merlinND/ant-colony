@@ -1,5 +1,6 @@
 const Phaser = require("phaser");
 const Class = Phaser.Class;
+const availableAgents = require("./agent.js").available;
 
 
 const GameLevel = new Class({
@@ -17,8 +18,12 @@ const GameLevel = new Class({
     isComplete: function() {},
 
     randomXPos: function() {},
-
     randomYPos: function() {},
+
+    // Returns an agent that should be run by default on this level. Will typically
+    // call the user's programmed function as part of its behavior.
+    // May return null if not available.
+    getAgent: function() { return null; }
 });
 
 const TestLevel1 = new Class({
@@ -106,6 +111,53 @@ const TestLevel1 = new Class({
         return Math.random() * this.map.heightInPixels;
     },
 
+    getAgent: function getAgent() {
+        const f = function(game, ant, print, goto, scene) {
+            // User function should
+            const computeDistance = this.userFunction(game, ant, print, goto, scene);
+            if (!this.once) {
+                print('Looking for food...');
+                this.once = true;
+            }
+            var body = ant.obj.body;
+
+            var target = null;
+            var distance = Infinity;
+            scene.level.items.forEach(function(item) {
+                if (ant.inventory.indexOf(item) >= 0) { return; }
+                var newDistance = computeDistance(item, body);
+                if (newDistance < distance) {
+                    distance = newDistance;
+                    target = item;
+                }
+            });
+            // TODO: don't redo the computation as long as it is busy
+            if (target) {
+                goto(target.x, target.y);
+            }
+        };
+
+        const TestLevel1Agent = new Class({
+            Extends: availableAgents['programmable'],
+
+            update: function update(game, ant, args) {
+                // Can't do anything until user function has been submitted
+                if (!this.userFunction)
+                    return;
+                if (args[2].level.isComplete()) {
+                    args[0]("Level complete!");
+                    this.stop(game, ant);
+                    game.setAgent("rotating");
+                    return;
+                }
+                this.tryRunningFunction(f.bind(this), game, ant, args);
+            },
+
+        });
+        return TestLevel1Agent;
+    },
+
+    updatePeriod: function () { return 1000; },
 });
 
 

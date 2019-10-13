@@ -6,6 +6,7 @@ const logger = require("./logger.js");
 var Ant = new Class({ // TODO can extend the Phaser object ?
     initialize: function initialize(scene, xPos, yPos) {
        this.scene = scene;
+       this.agent = null;
        this.obj = scene.physics.add.sprite(xPos, yPos, "ant");
        this.obj.maxWalkSpeed = 30;
        this.obj.setScale(this.obj.scale/2);
@@ -14,13 +15,16 @@ var Ant = new Class({ // TODO can extend the Phaser object ?
     },
 
     update: function update(game, delta) {
+        if (!this.agent)
+            return;
+
         if (this.timeSinceUpdate < this.agent.updatePeriod()) {
             this.timeSinceUpdate += delta;
             return;
         }
         this.timeSinceUpdate = 0;
 
-        args = [logger.print, this.goto.bind(this), this.scene];
+        const args = [logger.print, this.goto.bind(this), this.scene];
         this.agent.update(game, this, args);
     },
 

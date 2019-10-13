@@ -2,13 +2,12 @@ const Phaser = require("phaser");
 const Agent = require("./agent.js");
 const Level = require('./level.js');
 const Ant = require("./ant.js");
-const logger = require("./logger.js");
 
 const init = function(container) {
-    console.log('Initializing top-down playground (game only)');
+    console.log('Initializing ants game...');
 
     let CurrentLevel = Level.levels.TEST1;
-    let defaultAgentName = 'programmable';
+    let defaultAgentName = 'level';
 
     function preload () {
         // this.load.tilemapTiledJSON('test-level', 'maps/test.json');
@@ -76,7 +75,7 @@ const init = function(container) {
             i = (i + 1) % availableNames.length;
             var nextAgentName = availableNames[i];
 
-            this.setAgent(nextAgentName, Agent.available[nextAgentName]);
+            this.setAgent(nextAgentName);
         }, this);
 
 
@@ -107,8 +106,9 @@ const init = function(container) {
 
     function update(time, delta) {
         if (!this.levelComplete && this.level.isComplete()) {
-            var text = this.add.text(game.scale.width / 2, 10, "Level complete!", {'align': 'center'});
-            text.setScrollFactor(0);
+            // var text = this.add.text(game.scale.width / 2, 10,
+            //                          "Level complete!", {'align': 'center'});
+            // text.setScrollFactor(0);
             this.levelComplete = true;
         }
 
@@ -119,19 +119,30 @@ const init = function(container) {
     }
 
     var setAgent = function(name) {
+        const self = this;
         this.currentAgentName = name;
-
         this.ants.forEach(ant => {
             if (ant.agent)
                 ant.agent.stop(this, ant);
-            ant.agent = new Agent.available[name](this);
+            if (name == 'level') {
+                const LevelAgent = self.level.getAgent();
+                if (LevelAgent == null)
+                    return self.setAgent('programmable');
+                ant.agent = new LevelAgent(this);
+            } else {
+                ant.agent = new Agent.available[name](this);
+            }
         });
 
-        this.agentIndicator.setText("Agent: " + this.currentAgentName);
+        if (name == 'level')
+            this.agentIndicator.setText('');
+        else
+            this.agentIndicator.setText("Agent: " + this.currentAgentName);
     };
 
     var setUserCode = function(code) {
-        this.setAgent("programmable");
+        if (this.currentAgentName != 'level' && this.currentAgentName != 'programmable')
+            this.setAgent("level");
 
         this.ants.forEach(ant => {
             ant.agent.setUserCode(new Function('game', 'ant', 'print', 'goto', 'scene', code));
