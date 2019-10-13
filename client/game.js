@@ -53,13 +53,16 @@ const init = function(container) {
             var ant = new Ant.Ant(this, antPositions[i][0], antPositions[i][1]);
             this.physics.add.collider(ant.obj, this.level.worldLayer);
             ant.obj.setCollideWorldBounds(true);
+            // Face random direction
+            ant.obj.rotation = Math.random() * 2.0 * Math.PI;
             this.ants.push(ant);
         }
 
         this.anims.create({
-            key: 'up',
+            key: 'walk',
             frames: this.anims.generateFrameNumbers('ant', { start: 0, end: 61 }),
-            frameRate: 5,
+            // TODO; how to play this animation faster?
+            frameRate: 90,
             repeat: -1
         });
 
