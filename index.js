@@ -27,7 +27,9 @@ app.engine('.hbs', exphbs({
                 console.error(arguments);
                 return;
             }
-            return i18n.__.apply(this, arguments);
+            var res = i18n.__.apply(this, arguments);
+            var arry = [].concat(res);
+            return arry.join('\n');
         },
         // i18nVar: function() {
         //     console.log(arguments);
@@ -37,6 +39,13 @@ app.engine('.hbs', exphbs({
             return i18n.__n.apply(this, arguments);
         },
         markdown: markdownHelper,
+        join: function(val, delimiter, start, end) {
+            var arry = [].concat(val);
+            delimiter = ( typeof delimiter == "string" ? delimiter : ',' );
+            start = start || 0;
+            end = ( end === undefined ? arry.length : end );
+            return arry.slice(start, end).join(delimiter);
+        }
     },
 }));
 app.set('view engine', '.hbs');

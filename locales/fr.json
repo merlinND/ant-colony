@@ -12,6 +12,11 @@
     "game": "Jeu",
     "level1": {
         "instructions": "Dans **ce** niveau, ...",
-        "starter_code": "const distance_euclidienne = function(fourmi, objet) {\n    // Ton code ici!\n};\nreturn distance_euclidienne;"
+        "starter_code": [
+            "const distance_euclidienne = function(fourmi, objet) {",
+            "    // Ton code ici!",
+            "};",
+            "return distance_euclidienne;"
+        ]
     }
 }

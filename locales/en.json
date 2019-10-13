@@ -12,6 +12,11 @@
 	"game": "Game",
 	"level1": {
         "instructions": "In **this** level, ...",
-        "starter_code": "const euclidian_distance = function(ant, obj) {\n    // Your code here!\n};\nreturn euclidian_distance;"
+        "starter_code": [
+            "const euclidian_distance = function(ant, obj) {",
+            "    // Your code here!",
+            "};",
+            "return euclidian_distance;"
+        ]
     }
 }
