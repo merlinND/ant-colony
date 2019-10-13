@@ -65,13 +65,23 @@ app.use('/favicon.ico', express.static(__dirname + '/static/images/favicon.ico')
 
 // ----- Routes
 app.get('/', (req, res) => {
-    // TODO: get level name from route
-    const levelName = 'level1';
-    res.render('index', {
-        'levelStarterCode': levelName + ".starter_code",
-        'levelInstructions': levelName + ".instructions",
-    });
+    res.redirect('/levels/VarAndFunc');
 })
+
+app.get('/levels/:level', (req, res) => {
+	// TODO: find out level list
+    if (["VarAndFunc", "Loops"].includes(req.params.level)) {
+        const levelName = req.params.level;
+        res.render('index', {
+            'level': levelName,
+            'levelStarterCode': levelName + ".starter_code",
+            'levelInstructions': levelName + ".instructions",
+        });
+        return
+    }
+    res.status(404).send('Invalid level.')
+})
+
 app.get('/top-down-playground', (req, res) => {
     res.render('playground', { containerId: 'top-down-playground' });
 })

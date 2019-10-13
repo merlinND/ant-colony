@@ -11,35 +11,15 @@ const GameLevel = new Class({
     getName: function() { return null; },
 
     // Load level-specific assets, if necessary.
-    preload: function() {},
-
-    // Create objects and objectives for this level. Should be overwritten by specific levels.
-    create: function() {},
-
-    // Check whether the level's objectives are complete. Should be overwritten by specific levels.
-    isComplete: function() {},
-
-    randomXPos: function() {},
-    randomYPos: function() {},
-
-    // Returns an agent that should be run by default on this level. Will typically
-    // call the user's programmed function as part of its behavior.
-    // May return null if not available.
-    getAgent: function() { return null; }
-});
-
-const TestLevel1 = new Class({
-    Extends: GameLevel,
-
-    getName: function() { return "Test level 1"; },
-
     preload: function preload() {
-        this.game.load.image('objective-item', 'images/fruit.png');
+        this.game.load.tilemapTiledJSON(this.levelName, '/maps/'+this.levelName+'.json');
+        this.game.load.image('objective-item', '/images/fruit.png');
     },
 
+    // Create objects and objectives for this level. Should be overwritten by specific levels.
     create: function create() {
 
-        this.map = this.game.make.tilemap({ key: "test-level" });
+        this.map = this.game.make.tilemap({ key: this.levelName });
 
         const tileset = this.map.addTilesetImage("Terrain", "tiles");
         this.game.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
@@ -98,6 +78,11 @@ const TestLevel1 = new Class({
         this.spawns = spawns;
     },
 
+    // Returns an agent that should be run by default on this level. Will typically
+    // call the user's programmed function as part of its behavior.
+    // May return null if not available.
+    getAgent: function() { return null; },
+
     isComplete: function isComplete() {
         // Level is complete when all objects have been picked
         for (var i = 0; i < this.items.length; ++i) {
@@ -113,6 +98,15 @@ const TestLevel1 = new Class({
 
     randomYPos: function randomYPos() {
         return Math.random() * this.map.heightInPixels;
+    },
+});
+
+const VarAndFuncLevel = new Class({
+    Extends: GameLevel,
+
+    initialize: function initialize(game) {
+        this.game = game;
+        this.levelName = "VarAndFunc"
     },
 
     getAgent: function getAgent() {
@@ -143,7 +137,7 @@ const TestLevel1 = new Class({
             }
         };
 
-        const TestLevel1Agent = new Class({
+        const VarAndFuncLevelAgent = new Class({
             Extends: availableAgents['programmable'],
 
             update: function update(game, ant, args) {
@@ -159,17 +153,36 @@ const TestLevel1 = new Class({
                 this.tryRunningFunction(f.bind(this), game, ant, args);
             },
 
+    		updatePeriod: function () { return 1000; },
         });
-        return TestLevel1Agent;
+        return VarAndFuncLevelAgent;
+    },
+});
+
+const LoopsLevel = new Class({
+    Extends: GameLevel,
+
+    initialize: function initialize(game) {
+        this.game = game;
+        this.levelName = "Loops"
     },
 
-    updatePeriod: function () { return 1000; },
+    getAgent: function getAgent() {
+        const LoopsLevelAgent = new Class({
+            Extends: availableAgents['rotating'],
+
+            // TODO
+        });
+        return LoopsLevelAgent;
+    },
 });
 
 
 module.exports = {
     GameLevel: GameLevel,
     levels: {
-        TEST1: TestLevel1,
+        VarAndFunc : VarAndFuncLevel,
+        Loops: LoopsLevel,
+        Test: VarAndFuncLevel,
     }
 }

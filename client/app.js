@@ -7,7 +7,6 @@ var CodeMirrorPersist = require("codemirror-persist");
 CodeMirrorPersist(CodeMirror);
 
 
-const sideScrollerPlayground = require("./sideScrollerPlayground.js");
 const topDownPlayground = require("./game.js");
 const logger = require("./logger.js");
 
