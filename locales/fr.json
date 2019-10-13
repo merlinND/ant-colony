@@ -2,7 +2,8 @@
     "mainTitle": "Ant Colony",
     "instructions": {
         "title": "Instructions",
-        "begin": "Commencer"
+        "begin": "Commencer",
+        "templateCode": "On vous donne ce code pour commencer:"
     },
     "editor": {
         "title": "Éditeur",

@@ -36,6 +36,10 @@ button:disabled
 .instructions {
     text-align: justify;
 }
+.instructions pre {
+    background-color: #f0f0f0;
+    padding: 5px;
+}
 .instructions button {
     display: block;
     clear: both;
