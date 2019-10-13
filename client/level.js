@@ -113,27 +113,29 @@ const TestLevel1 = new Class({
 
     getAgent: function getAgent() {
         const f = function(game, ant, print, goto, scene) {
-            // User function should
+            // User function should compute the Euclidean distance
             const computeDistance = this.userFunction(game, ant, print, goto, scene);
-            if (!this.once) {
+            if (!this.target) {
                 print('Looking for food...');
-                this.once = true;
+                this.target = null;
+                // Find new target
+                var distance = Infinity;
+                var self = this;
+                scene.level.items.forEach(function(item) {
+                    if (ant.inventory.indexOf(item) >= 0) { return; }
+                    var newDistance = computeDistance(item, ant.obj.body);
+                    if (newDistance < distance) {
+                        distance = newDistance;
+                        self.target = item;
+                    }
+                });
             }
-            var body = ant.obj.body;
 
-            var target = null;
-            var distance = Infinity;
-            scene.level.items.forEach(function(item) {
-                if (ant.inventory.indexOf(item) >= 0) { return; }
-                var newDistance = computeDistance(item, body);
-                if (newDistance < distance) {
-                    distance = newDistance;
-                    target = item;
-                }
-            });
-            // TODO: don't redo the computation as long as it is busy
-            if (target) {
-                goto(target.x, target.y);
+            if (this.target) {
+                if (this.target.isPicked)
+                    this.target = null;
+                else
+                    goto(this.target.x, this.target.y);
             }
         };
 
