@@ -39,6 +39,8 @@ app.use('/js', express.static(__dirname + '/node_modules/phaser/dist'));
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.use('/css', express.static(__dirname + '/node_modules/codemirror/lib'));
 app.use('/css', express.static(__dirname + '/node_modules/codemirror/theme'));
+app.use('/favicon.png', express.static(__dirname + '/static/images/favicon.png'));
+app.use('/favicon.ico', express.static(__dirname + '/static/images/favicon.ico'));
 
 // ----- Routes
 app.get('/', (req, res) => {
