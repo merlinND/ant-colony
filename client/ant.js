@@ -40,6 +40,7 @@ var Ant = new Class({
     },
 
     goto: function goto(x,y) {
+        const updatePeriod = this.agent.updatePeriod();
         this.obj.anims.play("walk");
 
         var direction = new Phaser.Math.Vector2(
@@ -59,15 +60,25 @@ var Ant = new Class({
             diff += kTwoPi;
         }
 
-        this.obj.rotation = currentAngle + 0.1 * diff;
+        if (Math.abs(diff) > 0.1) {
+            this.obj.body.setAngularVelocity(100.0 * Math.sign(diff));
+            // TODO: what's the right time to angle?
+            var timeToAngle = 70.0 * 1000.0 * Math.abs(diff) / 100.0;
+            if (timeToAngle <= updatePeriod) {
+                this.scene.time.delayedCall(timeToAngle, function() {
+                    this.obj.body.setAngularVelocity(0.0);
+                }, [], this);
+            }
+        } else {
+            // Snap to correct angle
+            this.obj.body.setAngularVelocity(0.0);
+        }
 
-        // Snap to correct angle
-        this.obj.body.setAngularVelocity(0.0);
         // Now, walk toward the goal
         var timeToPos = distance / (this.obj.maxWalkSpeed / 1000);
         this.scene.physics.moveTo(this.obj, x, y, 30);
-        if (timeToPos <= Playground.agentUpdatePeriod) {
-            this.scene.time.delayedCall(timeToPos, function(){
+        if (timeToPos <= updatePeriod) {
+            this.scene.time.delayedCall(timeToPos, function() {
                 this.obj.body.reset(x,y);
                 this.obj.body.setAngularVelocity(0.0);
                 this.obj.anims.stop();

@@ -13,6 +13,11 @@ var Agent = new Class({
     updatePeriod: function () { return 1000; },
 });
 
+
+var IdleAgent = new Class({
+    Extends: Agent,
+});
+
 var ProgrammableAgent = new Class({
     Extends: Agent,
 
@@ -158,6 +163,7 @@ module.exports = {
         'rotating': RotatingAgent,
         'keyboard': KeyboardAgent,
         'greedy': GreedyAgent,
+        'idle': IdleAgent,
         /// Agent provided by the level
         'level': null,
     }
