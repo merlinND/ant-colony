@@ -63,23 +63,34 @@ app.use('/css', express.static(__dirname + '/node_modules/codemirror/theme'));
 app.use('/favicon.png', express.static(__dirname + '/static/images/favicon.png'));
 app.use('/favicon.ico', express.static(__dirname + '/static/images/favicon.ico'));
 
+const availableLevels = {
+    'direction': 'DirectionOfFood',
+    'distance': 'DistanceToFood',
+    'edible': 'IsFoodEdible',
+    'closest': 'ChooseClosestFood',
+    'foraging': 'Foraging',
+}
+
 // ----- Routes
 app.get('/', (req, res) => {
-    res.redirect('/levels/VarAndFunc');
+    res.redirect('/levels/direction');
+})
+app.get('/levels', (req, res) => {
+    res.redirect('/levels/direction');
 })
 
 app.get('/levels/:level', (req, res) => {
-	// TODO: find out level list
-    if (["VarAndFunc", "Loops"].includes(req.params.level)) {
-        const levelName = req.params.level;
-        res.render('index', {
-            'level': levelName,
-            'levelStarterCode': levelName + ".starter_code",
-            'levelInstructions': levelName + ".instructions",
-        });
-        return
+    if (!Object.keys(availableLevels).includes(req.params.level)) {
+        res.status(404).send('Unknown level name.');
+        return;
     }
-    res.status(404).send('Invalid level.')
+
+    const levelName = availableLevels[req.params.level];
+    res.render('index', {
+        'level': levelName,
+        'levelStarterCode': levelName + ".starter_code",
+        'levelInstructions': levelName + ".instructions",
+    });
 })
 
 app.get('/top-down-playground', (req, res) => {
