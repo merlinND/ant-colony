@@ -11,7 +11,7 @@
     	"play": "Play"
     },
 	"game": "Game",
-	"level1": {
+	"VarAndFunc": {
         "instructions": "In **this** level, ...",
         "starter_code": [
             "const euclidian_distance = function(ant, obj) {",

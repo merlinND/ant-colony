@@ -153,7 +153,7 @@ const VarAndFuncLevel = new Class({
                 this.tryRunningFunction(f.bind(this), game, ant, args);
             },
 
-    		updatePeriod: function () { return 1000; },
+            updatePeriod: function () { return 1000; },
         });
         return VarAndFuncLevelAgent;
     },
