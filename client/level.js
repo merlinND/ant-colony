@@ -126,11 +126,31 @@ const DistanceToFoodLevel = new Class({
     },
 
     getAgent: function getAgent() {
+        const testDistanceFunction = function(computeDistance, ant) {
+            var d = computeDistance(ant, ant);
+            if (d == undefined) {
+                logger.error("La fonction n'a pas de valeur de retour !");
+                return false;
+            }
+            if (Math.abs(d) > 1e-4) {
+                logger.error("La distance d'un objet à lui même devrait être zéro !");
+                return false;
+            }
+            return true;
+        };
+
         const f = function(game, ant, print, goto, scene) {
             // User function should compute the Euclidean distance
-            const computeDistance = this.userFunction(game, ant, print, goto, scene);
+            const computeDistance = this.userFunction(game, ant, goto, scene);
             if (!this.target) {
                 print('Je cherche de la nourriture...');
+
+                // Quick test of the user function
+                if (!testDistanceFunction(computeDistance, ant, print)) {
+                    game.setAgent('idle');
+                    return;
+                }
+
                 this.target = null;
                 // Find new target
                 var distance = Infinity;
