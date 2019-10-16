@@ -1,7 +1,7 @@
 const Phaser = require("phaser");
 const Class = Phaser.Class;
 const availableAgents = require("./agent.js").available;
-
+const logger = require("./logger.js");
 
 const GameLevel = new Class({
     initialize: function initialize(game) {
@@ -101,12 +101,28 @@ const GameLevel = new Class({
     },
 });
 
-const VarAndFuncLevel = new Class({
+const DirectionOfFoodLevel = new Class({
+    Extends: GameLevel,
+    initialize: function initialize(game) {
+        this.game = game;
+        this.levelName = "DirectionOfFood"
+    },
+
+    getAgent: function getAgent() {
+        const LoopsLevelAgent = new Class({
+            Extends: availableAgents['rotating'],
+            // TODO
+        });
+        return LoopsLevelAgent;
+    },
+});
+
+const DistanceToFoodLevel = new Class({
     Extends: GameLevel,
 
     initialize: function initialize(game) {
         this.game = game;
-        this.levelName = "VarAndFunc"
+        this.levelName = "DistanceToFood"
     },
 
     getAgent: function getAgent() {
@@ -153,26 +169,54 @@ const VarAndFuncLevel = new Class({
                 this.tryRunningFunction(f.bind(this), game, ant, args);
             },
 
-            // TODO
-            // updatePeriod: function () { return 1000; },
-            updatePeriod: function () { return 50; },
+            updatePeriod: function () { return 1000; },
         });
         return VarAndFuncLevelAgent;
     },
 });
 
-const LoopsLevel = new Class({
+const IsFoodEdibleLevel = new Class({
     Extends: GameLevel,
-
     initialize: function initialize(game) {
         this.game = game;
-        this.levelName = "Loops"
+        this.levelName = "IsFoodEdible"
     },
 
     getAgent: function getAgent() {
         const LoopsLevelAgent = new Class({
             Extends: availableAgents['rotating'],
+            // TODO
+        });
+        return LoopsLevelAgent;
+    },
+});
 
+const ChooseClosestFoodLevel = new Class({
+    Extends: GameLevel,
+    initialize: function initialize(game) {
+        this.game = game;
+        this.levelName = "ChooseClosestFood"
+    },
+
+    getAgent: function getAgent() {
+        const LoopsLevelAgent = new Class({
+            Extends: availableAgents['rotating'],
+            // TODO
+        });
+        return LoopsLevelAgent;
+    },
+});
+
+const ForagingLevel = new Class({
+    Extends: GameLevel,
+    initialize: function initialize(game) {
+        this.game = game;
+        this.levelName = "Foraging"
+    },
+
+    getAgent: function getAgent() {
+        const LoopsLevelAgent = new Class({
+            Extends: availableAgents['rotating'],
             // TODO
         });
         return LoopsLevelAgent;
@@ -183,8 +227,10 @@ const LoopsLevel = new Class({
 module.exports = {
     GameLevel: GameLevel,
     levels: {
-        VarAndFunc : VarAndFuncLevel,
-        Loops: LoopsLevel,
-        Test: VarAndFuncLevel,
+        DirectionOfFood: DirectionOfFoodLevel,
+        DistanceToFood: DistanceToFoodLevel,
+        IsFoodEdible: IsFoodEdibleLevel,
+        ChooseClosestFood: ChooseClosestFoodLevel,
+        Foraging: ForagingLevel,
     }
 }

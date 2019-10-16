@@ -61,7 +61,6 @@ const init = function(container) {
         this.anims.create({
             key: 'walk',
             frames: this.anims.generateFrameNumbers('ant', { start: 0, end: 61 }),
-            // TODO; how to play this animation faster?
             frameRate: 90,
             repeat: -1
         });
@@ -87,11 +86,6 @@ const init = function(container) {
         this.cameras.main.setDeadzone(150, 150);
         // this.cameras.main.setZoom(2);
         this.cameras.main.startFollow(this.ants[0].obj, true);
-
-
-        // TODO: figure out time scaling
-        // this.scene.time.timeScale = 2;
-        // this.time.timeScale = 4;
 
         // Collision rule with pickable items
         this.level.items.forEach(item => {

@@ -11,7 +11,8 @@
         "play": "Jouer"
     },
     "game": "Jeu",
-    "VarAndFunc": {
+
+    "DistanceToFood": {
         "instructions": "Dans **ce** niveau, ...",
         "starter_code": [
             "const distance_euclidienne = function(fourmi, objet) {",
