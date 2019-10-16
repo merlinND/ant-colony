@@ -6,16 +6,15 @@ const Ant = require("./ant.js");
 const init = function(container) {
     console.log('Initializing ants game...');
 
-    let CurrentLevel = Level.levels.TEST1;
     let defaultAgentName = 'level';
 
+    let CurrentLevel = Level.levels[container[0].getAttribute("level")];
+
     function preload () {
-        // this.load.tilemapTiledJSON('test-level', 'maps/test.json');
-        this.load.tilemapTiledJSON('test-level', 'maps/level-1.json');
-        this.load.image('tiles', 'images/terrain.png');
+        this.load.image('tiles', '/images/terrain.png');
 
         this.load.spritesheet('ant',
-            'images/ant-walk.png',
+            '/images/ant-walk.png',
             // { frameWidth: 1616/8, frameHeight: 1984/8 }
             { frameWidth: 417/8, frameHeight: 512/8 }
         );
