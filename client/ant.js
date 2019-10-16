@@ -41,14 +41,15 @@ var Ant = new Class({
 
     goto: function goto(x,y) {
         this.obj.anims.play("walk");
-        this.isWalking = this.isWalking || false;
 
-        var direction = new Phaser.Math.Vector2(x - this.obj.x, y - this.obj.y);
+        var direction = new Phaser.Math.Vector2(
+            x - this.obj.x, y - this.obj.y);
         var distance  = direction.length();
 
         // First, make sure the ant is oriented correctly
         var currentAngle = normalizeAngle(this.obj.rotation);
-        var angleTo = Math.atan2(direction.y / distance, direction.x / distance) + 0.5 * Math.PI;
+        var angleTo = Math.atan2(
+            direction.y / distance, direction.x / distance) + 0.5 * Math.PI;
         angleTo = normalizeAngle(angleTo);
         var diff = angleTo - currentAngle;
         if (diff > Math.PI) {
@@ -58,40 +59,19 @@ var Ant = new Class({
             diff += kTwoPi;
         }
 
-        if (Math.abs(diff) > 0.1 && !this.isWalking) {
-            this.obj.body.setAngularVelocity(0.0);
-            this.obj.anims.stop();
-
-            // this.obj.rotation = currentAngle + 0.1 * diff;
-            this.obj.body.setAngularVelocity(100.0 * Math.sign(diff));
-            // Schedule walking logic for when rotation has finished
-            var timeToAngle = Math.abs(diff) / (100.0 / 1000);
-            if (timeToAngle <= Playground.agentUpdatePeriod) {
-                this.scene.time.delayedCall(timeToAngle, function() {
-                    console.log("Delayed call");
-                    this.goto(x, y);
-                }, [], this);
-            }
-            return;
-        }
+        this.obj.rotation = currentAngle + 0.1 * diff;
 
         // Snap to correct angle
-        this.obj.rotation = angleTo;
         this.obj.body.setAngularVelocity(0.0);
         // Now, walk toward the goal
         var timeToPos = distance / (this.obj.maxWalkSpeed / 1000);
         this.scene.physics.moveTo(this.obj, x, y, 30);
-        this.isWalking = true;
         if (timeToPos <= Playground.agentUpdatePeriod) {
             this.scene.time.delayedCall(timeToPos, function(){
-                this.isWalking = false;
                 this.obj.body.reset(x,y);
                 this.obj.body.setAngularVelocity(0.0);
                 this.obj.anims.stop();
             }, [], this);
-        } else {
-            // Will stop walking soon
-            this.isWalking = false;
         }
     },
 });

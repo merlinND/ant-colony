@@ -114,7 +114,7 @@ const VarAndFuncLevel = new Class({
             // User function should compute the Euclidean distance
             const computeDistance = this.userFunction(game, ant, print, goto, scene);
             if (!this.target) {
-                print('Looking for food...');
+                print('Je cherche de la nourriture...');
                 this.target = null;
                 // Find new target
                 var distance = Infinity;
@@ -145,7 +145,7 @@ const VarAndFuncLevel = new Class({
                 if (!this.userFunction)
                     return;
                 if (args[2].level.isComplete()) {
-                    args[0]("Level complete!");
+                    args[0]("Niveau réussi !");
                     this.stop(game, ant);
                     game.setAgent("rotating");
                     return;
@@ -153,7 +153,9 @@ const VarAndFuncLevel = new Class({
                 this.tryRunningFunction(f.bind(this), game, ant, args);
             },
 
-            updatePeriod: function () { return 1000; },
+            // TODO
+            // updatePeriod: function () { return 1000; },
+            updatePeriod: function () { return 50; },
         });
         return VarAndFuncLevelAgent;
     },

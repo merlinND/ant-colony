@@ -2,6 +2,7 @@ const Phaser = require("phaser");
 const Agent = require("./agent.js");
 const Level = require('./level.js');
 const Ant = require("./ant.js");
+const logger = require("./logger.js");
 
 const init = function(container) {
     console.log('Initializing ants game...');
@@ -101,6 +102,7 @@ const init = function(container) {
                     ant.inventory.push(picked);
                     picked.isPicked = true;
                     picked.disableBody(true, true);
+                    logger.print('Trouvé de la nourriture!');
                 }, null, this);
             });
         });
