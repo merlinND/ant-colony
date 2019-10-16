@@ -16,12 +16,7 @@ npm install --dev .
 grunt
 ```
 
-For the first time, trigger a compilation & server start by changing and saving those files:
-
-- index.js
-- client/app.js
-
-TODO: there is most likely a better way to do this
+The compilation steps will run automatically on start.
 
 ## Levels
 
