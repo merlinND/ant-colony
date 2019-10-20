@@ -40,5 +40,21 @@
             "};",
             "return is_edible;"
         ]
+    },
+    "ChooseClosestFood": {
+        "instructions": "TODO: ChooseClosestFood instructions",
+        "starter_code": [
+            "const euclidean_distance = function(ant, food) {",
+            "    var d1 = ant.x - food.x;",
+            "    var d2 = ant.y - food.y;",
+            "    return Math.sqrt(d1 * d1 + d2 * d2);",
+            "};",
+            "",
+            "const choose_closest = function(ant, foodsList) {",
+            "    // Use the function euclidean_distance to find the closest",
+            "    // food in the given list foodsList. Return the closest food.",
+            "};",
+            "return choose_closest;"
+        ]
     }
 }

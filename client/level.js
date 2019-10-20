@@ -281,11 +281,71 @@ const ChooseClosestFoodLevel = new Class({
     },
 
     getAgent: function getAgent() {
-        const LoopsLevelAgent = new Class({
-            Extends: availableAgents['rotating'],
-            // TODO
+        const testUserFunction = function(pickClosest, ant) {
+            var x0 = ant.obj.body.x;
+            var y0 = ant.obj.body.y;
+            var fakeAnt = { x: x0, y: y0 };
+            var fakeFoods = [
+                { x: x0 + 1, y: y0 + 1 },
+                { x: x0 + 2, y: y0 - 2 },
+            ];
+            var p = pickClosest(fakeAnt, fakeFoods);
+            if (p == undefined) {
+                logger.error("La fonction n'a pas de valeur de retour !");
+                return false;
+            }
+            if (fakeFoods.indexOf(p) < 0) {
+                logger.error("La fonction devrait retourner l'un des fruits de la liste !");
+                return false;
+            }
+            return true;
+        };
+
+        const ChooseClosestFoodAgent = new Class({
+            Extends: availableAgents['programmable'],
+
+            levelSpecificFunction: function(game, ant, print, goto, scene) {
+                // User function should return whether the food is edible
+                const pickClosest = this.userFunction(game, ant, goto, scene);
+                if (!this.target) {
+                    print('Je cherche de la nourriture...');
+
+                    // Quick test of the user function
+                    if (!testUserFunction(pickClosest, ant)) {
+                        game.setAgent('idle');
+                        return;
+                    }
+
+                    // Prepare user-friendly list of options
+                    var options = [];
+                    scene.level.items.forEach(function(item) {
+                        if (ant.inventory.indexOf(item) >= 0)
+                            return;
+                        options.push(item);
+                    });
+                    if (!options) {
+                        this.stop(game, ant);
+                        return;
+                    }
+
+                    // Ask user to find closest food and go there
+                    var antFacade = { x: ant.obj.body.x, y: ant.obj.body.y };
+                    this.target = pickClosest(antFacade, options);
+                    if (!this.target) {
+                        print('Aucun choix retourné');
+                        this.stop(game, ant);
+                    }
+                }
+
+                if (this.target) {
+                    if (this.target.isPicked)
+                        this.target = null;
+                    else
+                        goto(this.target.x, this.target.y);
+                }
+            },
         });
-        return LoopsLevelAgent;
+        return ChooseClosestFoodAgent;
     },
 });
 

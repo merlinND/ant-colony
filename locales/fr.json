@@ -31,5 +31,21 @@
             "};",
             "return est_commestible;"
         ]
+    },
+    "ChooseClosestFood": {
+        "instructions": "TODO: instructions pour ChooseClosestFood",
+        "starter_code": [
+            "const distance_euclidienne = function(fourmi, objet) {",
+            "    var d1 = fourmi.x - objet.x;",
+            "    var d2 = fourmi.y - objet.y;",
+            "    return Math.sqrt(d1 * d1 + d2 * d2);",
+            "};",
+            "",
+            "const choisir_plus_proche = function(fourmi, listObjets) {",
+            "    // Use the function distance_euclidienne to find the closest",
+            "    // objet in the given list listObjets. Return the closest objet.",
+            "};",
+            "return choisir_plus_proche;"
+        ]
     }
 }
