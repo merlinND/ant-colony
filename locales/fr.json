@@ -20,5 +20,16 @@
             "};",
             "return distance_euclidienne;"
         ]
+    },
+    "IsFoodEdible": {
+        "instructions": "TODO: instructions pour IsFoodEdible",
+        "starter_code": [
+            "const est_commestible = function(fruit) {",
+            "    // Un fruit qui n'est pas empoisonné (fruit.poison)",
+            "    // et agé de moins de deux jours (fruit.age)",
+            "    // est commestible.",
+            "};",
+            "return est_commestible;"
+        ]
     }
 }

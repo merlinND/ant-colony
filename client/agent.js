@@ -21,7 +21,7 @@ var IdleAgent = new Class({
 var ProgrammableAgent = new Class({
     Extends: Agent,
 
-    initialize: function () {
+    initialize: function ProgrammableAgent() {
         this.clearUserCode();
     },
 
@@ -34,27 +34,41 @@ var ProgrammableAgent = new Class({
 
     tryRunningFunction: function(f, game, ant, args) {
         if (!f)
-            return false;
+            return undefined;
         editor.clearCodeErrors(game.codeEditor);
 
         try {
-            f(game, ant, ...args);
+            return f(game, ant, ...args);
         } catch (e) {
             editor.showCodeError(game.codeEditor, e);
             this.clearUserCode();
-            return false;
+            return undefined;
         }
-        return true;
     },
 
+    // Must be overriden with level-specific behavior
+    levelSpecificFunction: function () {},
+
     update: function update(game, ant, args) {
-        this.tryRunningFunction(this.userFunction, game, ant, args);
+        // Can't do anything until user function has been submitted
+        if (!this.userFunction)
+            return;
+        if (args[2].level.isComplete()) {
+            args[0]("Niveau réussi !");
+            this.stop(game, ant);
+            game.setAgent("rotating");
+            return;
+        }
+
+        this.tryRunningFunction(this.levelSpecificFunction.bind(this), game, ant, args);
     },
 
     stop: function update(game, ant) {
         ant.obj.body.setAngularVelocity(0);
         ant.obj.body.setVelocity(0, 0);
     },
+
+    updatePeriod: function () { return 1000; },
 });
 
 var GreedyAgent = new Class({

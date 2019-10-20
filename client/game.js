@@ -88,11 +88,19 @@ const init = function(container) {
         this.cameras.main.startFollow(this.ants[0].obj, true);
 
         // Collision rule with pickable items
+        const game = this.game;
         this.level.items.forEach(item => {
             this.ants.forEach(ant => {
                 this.physics.add.overlap(ant.obj, item, function(a, b) {
                     var picked = a;
                     if (picked == ant.obj) { picked = b }
+                    // Agent may refuse to pick this object
+                    const args = [logger.print, ant.goto.bind(ant), ant.scene];
+                    if (ant.agent.shouldPick !== undefined
+                        && !ant.agent.shouldPick(picked, game, ant, args)) {
+                        return;
+                    }
+
                     ant.inventory.push(picked);
                     picked.isPicked = true;
                     picked.disableBody(true, true);
@@ -113,7 +121,6 @@ const init = function(container) {
         this.ants.forEach(ant => {
             ant.update(game, delta);
         });
-
     }
 
     var setAgent = function(name) {
@@ -132,7 +139,7 @@ const init = function(container) {
             }
         });
 
-        if (name == 'level')
+        if (name == 'level' || name == 'rotating')
             this.agentIndicator.setText('');
         else
             this.agentIndicator.setText("Agent: " + this.currentAgentName);

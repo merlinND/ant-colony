@@ -14,6 +14,8 @@ const GameLevel = new Class({
     preload: function preload() {
         this.game.load.tilemapTiledJSON(this.levelName, '/maps/'+this.levelName+'.json');
         this.game.load.image('objective-item', '/images/fruit.png');
+        this.game.load.image('objective-item-aged', '/images/fruit-aged.png');
+        this.game.load.image('objective-item-poison', '/images/fruit-poison.png');
     },
 
     // Create objects and objectives for this level. Should be overwritten by specific levels.
@@ -29,42 +31,40 @@ const GameLevel = new Class({
         this.worldLayer = this.map.createStaticLayer("world", tileset, 0, 0);
         const aboveLayer = this.map.createStaticLayer("above", tileset, 0, 0);
 
-        // `collides` property must be set to true in Tiler for the relevant tiles.
+        // `collides` property must be set to true in Tiled for the relevant tiles.
         this.worldLayer.setCollisionByProperty({ collides: true });
 
-        // Debug rendering
-        // const debugGraphics = this.add.graphics();
-        // debugGraphics.setAlpha(0.75);
-        // worldLayer.renderDebug(debugGraphics, {
-        //   tileColor: null, // Color of non-colliding tiles
-        //   collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-        //   faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
-        // });
-
         // Spawn pickable items (e.g. food)
-        var positions = [];
-        this.worldLayer.filterTiles(function (t) {
-            if (t.properties.food) {
-                positions.push([ (t.x + 0.5) * t.width,
-                                 (t.y + 0.5) * t.height ]);
-                t.setVisible(false);
-                t.setCollision(false);
-            }
-        });
-        if (!positions) {
-            // Some hardcoded positions for testing
-            // positions = [[332, 100], [543, 64], [256, 460], [64, 680]];
-            positions = [[332, 100], [543, 64], [256, 120], [64, 64]];
-        }
-
         this.items = [];
-        for (var i = 0; i < positions.length; ++i) {
-            // var item = this.game.physics.add.sprite(300 + 32 * i, 100 + 32 * i, "objective-item");
-            var pos = positions[i];
-            var item = this.game.physics.add.sprite(pos[0], pos[1], "objective-item");
+        const self = this;
+        this.worldLayer.filterTiles(function (t) {
+            if (!t.properties.food)
+                return;
+
+            let position = [ (t.x + 0.5) * t.width,
+                             (t.y + 0.5) * t.height ];
+            // Make marker tile invisible
+            t.setVisible(false);
+            t.setCollision(false);
+
+            // Check for special properties (age, poisonous)
+            var tileName = 'objective-item'
+            const isPoison = (t.properties.poison !== undefined) && t.properties.poison;
+            const isOld = (t.properties.age !== undefined) && t.properties.age > 1;
+            if (isPoison)
+                tileName += '-poison';
+            else if (isOld)
+                tileName += '-aged';
+
+            // Spawn object
+            var item = self.game.physics.add.sprite(position[0], position[1], tileName);
             item.isPicked = false;
-            this.items.push(item);
-        }
+            item.poison = isPoison;
+            item.age = 1;
+            if (isOld)
+                item.age = 3;
+            self.items.push(item);
+        });
 
         // Find ant spawn locations
         var spawns = [];
@@ -139,57 +139,42 @@ const DistanceToFoodLevel = new Class({
             return true;
         };
 
-        const f = function(game, ant, print, goto, scene) {
-            // User function should compute the Euclidean distance
-            const computeDistance = this.userFunction(game, ant, goto, scene);
-            if (!this.target) {
-                print('Je cherche de la nourriture...');
-
-                // Quick test of the user function
-                if (!testDistanceFunction(computeDistance, ant, print)) {
-                    game.setAgent('idle');
-                    return;
-                }
-
-                this.target = null;
-                // Find new target
-                var distance = Infinity;
-                var self = this;
-                scene.level.items.forEach(function(item) {
-                    if (ant.inventory.indexOf(item) >= 0) { return; }
-                    var newDistance = computeDistance(item, ant.obj.body);
-                    if (newDistance < distance) {
-                        distance = newDistance;
-                        self.target = item;
-                    }
-                });
-            }
-
-            if (this.target) {
-                if (this.target.isPicked)
-                    this.target = null;
-                else
-                    goto(this.target.x, this.target.y);
-            }
-        };
-
         const VarAndFuncLevelAgent = new Class({
             Extends: availableAgents['programmable'],
 
-            update: function update(game, ant, args) {
-                // Can't do anything until user function has been submitted
-                if (!this.userFunction)
-                    return;
-                if (args[2].level.isComplete()) {
-                    args[0]("Niveau réussi !");
-                    this.stop(game, ant);
-                    game.setAgent("rotating");
-                    return;
-                }
-                this.tryRunningFunction(f.bind(this), game, ant, args);
-            },
+            levelSpecificFunction: function(game, ant, print, goto, scene) {
+                // User function should compute the Euclidean distance
+                const computeDistance = this.userFunction(game, ant, goto, scene);
+                if (!this.target) {
+                    print('Je cherche de la nourriture...');
 
-            updatePeriod: function () { return 1000; },
+                    // Quick test of the user function
+                    if (!testDistanceFunction(computeDistance, ant, print)) {
+                        game.setAgent('idle');
+                        return;
+                    }
+
+                    this.target = null;
+                    // Find new target
+                    var distance = Infinity;
+                    var self = this;
+                    scene.level.items.forEach(function(item) {
+                        if (ant.inventory.indexOf(item) >= 0) { return; }
+                        var newDistance = computeDistance(item, ant.obj.body);
+                        if (newDistance < distance) {
+                            distance = newDistance;
+                            self.target = item;
+                        }
+                    });
+                }
+
+                if (this.target) {
+                    if (this.target.isPicked)
+                        this.target = null;
+                    else
+                        goto(this.target.x, this.target.y);
+                }
+            },
         });
         return VarAndFuncLevelAgent;
     },
@@ -197,17 +182,94 @@ const DistanceToFoodLevel = new Class({
 
 const IsFoodEdibleLevel = new Class({
     Extends: GameLevel,
-    initialize: function initialize(game) {
+    initialize: function IsFoodEdibleLevel(game) {
         this.game = game;
         this.levelName = "IsFoodEdible"
     },
 
+    isComplete: function() {
+        // Level is complete when all *edible* foods have been picked
+        for (var i = 0; i < this.items.length; ++i) {
+            const isEdible = !this.items[i].poison && (this.items[i].age <= 1);
+            if (isEdible && !this.items[i].isPicked)
+                return false;
+        }
+        return true;
+    },
+
     getAgent: function getAgent() {
-        const LoopsLevelAgent = new Class({
-            Extends: availableAgents['rotating'],
-            // TODO
+        const testUserFunction = function(isEdible) {
+            var fakeFood = { age: 1, poison: false };
+            var b = isEdible(fakeFood);
+            if (b == undefined) {
+                logger.error("La fonction n'a pas de valeur de retour !");
+                return false;
+            }
+            if (typeof b !== "boolean") {
+                logger.error("La fonction devrait retourner `true` ou `false` (type booléen)");
+                return false;
+            }
+            return true;
+        };
+
+        const IsFoodEdibleAgent = new Class({
+            Extends: availableAgents['programmable'],
+
+            distance: function(o1, o2) {
+                var direction = new Phaser.Math.Vector2(o1.x - o2.x, o1.y - o2.y);
+                return direction.length();
+            },
+
+            shouldPick: function(object, game, ant, args) {
+                if (!this.userFunction)
+                    return true;
+                const f = function(game, ant, print, goto, scene) {
+                    const isEdible = this.userFunction(game, ant, goto, scene);
+                    return isEdible(object);
+                };
+                return this.tryRunningFunction(f.bind(this), game, ant, args);
+            },
+
+            levelSpecificFunction: function(game, ant, print, goto, scene) {
+                // User function should return whether the food is edible
+                const isEdible = this.userFunction(game, ant, goto, scene);
+                if (!this.target) {
+                    print('Je cherche de la nourriture...');
+
+                    // Quick test of the user function
+                    if (!testUserFunction(isEdible)) {
+                        game.setAgent('idle');
+                        return;
+                    }
+
+                    this.target = null;
+                    // Find new target (closest that is edible)
+                    var distance = Infinity;
+                    var self = this;
+                    scene.level.items.forEach(function(item) {
+                        if (ant.inventory.indexOf(item) >= 0) { return; }
+                        if (!isEdible(item)) { return; }
+                        var newDistance = self.distance(item, ant.obj.body);
+                        if (newDistance < distance) {
+                            distance = newDistance;
+                            self.target = item;
+                        }
+                    });
+
+                    // Could not find any more targets
+                    if (!this.target)
+                        this.stop(game, ant);
+                }
+
+                if (this.target) {
+                    if (this.target.isPicked)
+                        this.target = null;
+                    else
+                        goto(this.target.x, this.target.y);
+                }
+            },
         });
-        return LoopsLevelAgent;
+        return IsFoodEdibleAgent;
     },
 });
 

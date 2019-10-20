@@ -20,5 +20,25 @@
             "};",
             "return euclidian_distance;"
         ]
+    },
+    "DirectionToFood": {
+        "instructions": "TODO: DirectionToFood instructions",
+        "starter_code": [
+            "const angle_to_object = function(ant, obj) {",
+            "    // Your code here!",
+            "};",
+            "return angle_to_object;"
+        ]
+    },
+    "IsFoodEdible": {
+        "instructions": "TODO: IsFoodEdible instructions",
+        "starter_code": [
+            "const is_edible = function(food) {",
+            "    // A fruit that is not poisoned (fruit.poison)",
+            "    // and that is less than two days old (fruit.age)",
+            "    // is edible.",
+            "};",
+            "return is_edible;"
+        ]
     }
 }

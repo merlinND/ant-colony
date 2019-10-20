@@ -1,6 +1,5 @@
 const Phaser = require("phaser");
 const Class = Phaser.Class;
-const Playground = require("./game.js");
 const logger = require("./logger.js");
 
 const kTwoPi = 2 * Math.PI;
