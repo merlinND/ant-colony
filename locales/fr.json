@@ -21,6 +21,16 @@
             "return distance_euclidienne;"
         ]
     },
+    "DirectionOfFood": {
+        "instructions": "TODO: instructions pour DirectionOfFood",
+        "starter_code": [
+            "const angle_objet = function(fourmi, objet) {",
+            "    // Calcule l'angle entre (fourmi.x, fourmi.y)",
+            "    // et (objet.x, objet.y), en radians.",
+            "};",
+            "return angle_objet;"
+        ]
+    },
     "IsFoodEdible": {
         "instructions": "TODO: instructions pour IsFoodEdible",
         "starter_code": [

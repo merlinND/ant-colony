@@ -101,22 +101,6 @@ const GameLevel = new Class({
     },
 });
 
-const DirectionOfFoodLevel = new Class({
-    Extends: GameLevel,
-    initialize: function initialize(game) {
-        this.game = game;
-        this.levelName = "DirectionOfFood"
-    },
-
-    getAgent: function getAgent() {
-        const LoopsLevelAgent = new Class({
-            Extends: availableAgents['rotating'],
-            // TODO
-        });
-        return LoopsLevelAgent;
-    },
-});
-
 const DistanceToFoodLevel = new Class({
     Extends: GameLevel,
 
@@ -139,7 +123,7 @@ const DistanceToFoodLevel = new Class({
             return true;
         };
 
-        const VarAndFuncLevelAgent = new Class({
+        const DistanceToFoodAgent = new Class({
             Extends: availableAgents['programmable'],
 
             levelSpecificFunction: function(game, ant, print, goto, scene) {
@@ -176,7 +160,78 @@ const DistanceToFoodLevel = new Class({
                 }
             },
         });
-        return VarAndFuncLevelAgent;
+        return DistanceToFoodAgent;
+    },
+});
+
+const DirectionOfFoodLevel = new Class({
+    Extends: GameLevel,
+    initialize: function initialize(game) {
+        this.game = game;
+        this.levelName = "DirectionOfFood"
+    },
+
+    getAgent: function getAgent() {
+        const testAngleFunction = function(computeAngle, ant) {
+            var fakeObject = { x: ant.obj.body.x, y: ant.obj.body.y };
+            var d = computeAngle(ant, fakeObject);
+            if (d == undefined) {
+                logger.error("La fonction n'a pas de valeur de retour !");
+                return false;
+            }
+            if (d < 0. && d > 2 * Math.PI) {
+                logger.error("L'angle doit être compris entre 0 et 2 pi (en radians)");
+                return false;
+            }
+            return true;
+        };
+
+        const DirectionOfFoodAgent = new Class({
+            Extends: availableAgents['programmable'],
+
+            distance: function(o1, o2) {
+                var direction = new Phaser.Math.Vector2(o1.x - o2.x, o1.y - o2.y);
+                return direction.length();
+            },
+
+            levelSpecificFunction: function(game, ant, print, goto, scene) {
+                // User function should compute the Euclidean distance
+                const computeAngle = this.userFunction(game, ant, goto, scene);
+                if (!this.target) {
+                    print('Je cherche de la nourriture...');
+
+                    // Quick test of the user function
+                    if (!testAngleFunction(computeAngle, ant)) {
+                        game.setAgent('idle');
+                        return;
+                    }
+
+                    this.target = null;
+                    // Find new target
+                    var distance = Infinity;
+                    var self = this;
+                    scene.level.items.forEach(function(item) {
+                        if (ant.inventory.indexOf(item) >= 0) { return; }
+                        var newDistance = self.distance(item, ant.obj.body);
+                        if (newDistance < distance) {
+                            distance = newDistance;
+                            self.target = item;
+                        }
+                    });
+                }
+
+                if (this.target) {
+                    if (this.target.isPicked)
+                        this.target = null;
+                    else {
+                        var angle = computeAngle(ant.obj.body, this.target);
+                        var distance = this.distance(ant.obj.body, this.target);
+                        goto(distance * Math.cos(angle), distance * Math.sin(angle));
+                    }
+                }
+            },
+        });
+        return DirectionOfFoodAgent;
     },
 });
 

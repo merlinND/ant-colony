@@ -21,11 +21,12 @@
             "return euclidian_distance;"
         ]
     },
-    "DirectionToFood": {
+    "DirectionOfFood": {
         "instructions": "TODO: DirectionToFood instructions",
         "starter_code": [
-            "const angle_to_object = function(ant, obj) {",
-            "    // Your code here!",
+            "const angle_to_object = function(ant, food) {",
+            "    // Compute the angle between (ant.x, ant.y)",
+            "    // and (food.x, food.y), in radians.",
             "};",
             "return angle_to_object;"
         ]
