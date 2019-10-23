@@ -62,9 +62,16 @@ git clone --recursive git@github.com:merlinND/ant-colony.git
 cd ant-colony
 npm install --dev
 # Compile the application
-grunt
+grunt browserify
 
 # Start the app, pm2 will restart it if needed when rebooting, etc
+pm2 start ecosystem.config.js --env production
+```
+
+Pulling the latest changing, rebuilding and reloading the app:
+
+```
+git pull && grunt browserify
 pm2 start ecosystem.config.js --env production
 ```
 
