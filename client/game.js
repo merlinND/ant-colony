@@ -149,6 +149,18 @@ const init = function(container) {
         if (this.currentAgentName != 'level' && this.currentAgentName != 'programmable')
             this.setAgent("level");
 
+        // User code is expected to contain one key function that the user is supposed to implement.
+        // We add an instruction to return that function.
+        var re = /^\s*function\s*([a-zA-Z0-9_]+)\s*\(/gmi;
+        var matches = code.matchAll(re);
+        if (matches != null) {
+            // Keep the last function's name
+            var functionName = null;
+            for (var match of matches)
+                functionName = match[1];
+            code += '\nreturn ' + functionName + ';';
+        }
+
         this.ants.forEach(ant => {
             ant.agent.setUserCode(new Function('game', 'ant', 'print', 'goto', 'scene', code));
         });

@@ -14,49 +14,45 @@
     "levelComplete": "Niveau réussi !",
 
     "DistanceToFood": {
-        "instructions": "Dans **ce** niveau, ...",
+        "instructions": "TODO: instructions pour DistanceToFood",
         "starter_code": [
-            "const distance_euclidienne = function(fourmi, objet) {",
+            "function distance_euclidienne(fourmi, objet) {",
             "    // Ton code ici!",
-            "};",
-            "return distance_euclidienne;"
+            "};"
         ]
     },
     "DirectionOfFood": {
         "instructions": "TODO: instructions pour DirectionOfFood",
         "starter_code": [
-            "const angle_objet = function(fourmi, objet) {",
+            "function angle_objet(fourmi, objet) {",
             "    // Calcule l'angle entre (fourmi.x, fourmi.y)",
             "    // et (objet.x, objet.y), en radians.",
-            "};",
-            "return angle_objet;"
+            "};"
         ]
     },
     "IsFoodEdible": {
         "instructions": "TODO: instructions pour IsFoodEdible",
         "starter_code": [
-            "const est_commestible = function(fruit) {",
+            "function est_commestible(fruit) {",
             "    // Un fruit qui n'est pas empoisonné (fruit.poison)",
             "    // et agé de moins de deux jours (fruit.age)",
             "    // est commestible.",
-            "};",
-            "return est_commestible;"
+            "};"
         ]
     },
     "ChooseClosestFood": {
         "instructions": "TODO: instructions pour ChooseClosestFood",
         "starter_code": [
-            "const distance_euclidienne = function(fourmi, objet) {",
+            "function distance_euclidienne(fourmi, objet) {",
             "    var d1 = fourmi.x - objet.x;",
             "    var d2 = fourmi.y - objet.y;",
             "    return Math.sqrt(d1 * d1 + d2 * d2);",
             "};",
             "",
-            "const choisir_plus_proche = function(fourmi, listObjets) {",
+            "function choisir_plus_proche(fourmi, listObjets) {",
             "    // Use the function distance_euclidienne to find the closest",
             "    // objet in the given list listObjets. Return the closest objet.",
-            "};",
-            "return choisir_plus_proche;"
+            "};"
         ]
     }
 }
