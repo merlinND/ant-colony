@@ -66,7 +66,7 @@ const init = function(container) {
         });
 
         // Initialize witht the default agent
-        this.agentIndicator = this.add.text(10, 10, "Agent: ", {'align': 'left'});
+        this.agentIndicator = this.add.text(10, 10, "Status: ", {'align': 'left'});
         this.agentIndicator.setScrollFactor(0);
         this.setAgent(defaultAgentName);
 
@@ -142,7 +142,7 @@ const init = function(container) {
         if (name == 'level' || name == 'rotating')
             this.agentIndicator.setText('');
         else
-            this.agentIndicator.setText("Agent: " + this.currentAgentName);
+            this.agentIndicator.setText("Status: " + this.currentAgentName);
     };
 
     var setUserCode = function(code) {

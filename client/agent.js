@@ -18,6 +18,19 @@ var IdleAgent = new Class({
     Extends: Agent,
 });
 
+var DeadAgent = new Class({
+    Extends: IdleAgent,
+
+    update: function update(game, ant, args) {
+        if (ant.obj.alpha >= 0.8)
+            ant.obj.alpha = 0.4
+        else
+            ant.obj.alpha = 0.8
+    },
+
+    updatePeriod: function () { return 500; },
+});
+
 var ProgrammableAgent = new Class({
     Extends: Agent,
 
@@ -66,6 +79,7 @@ var ProgrammableAgent = new Class({
     stop: function update(game, ant) {
         ant.obj.body.setAngularVelocity(0);
         ant.obj.body.setVelocity(0, 0);
+        ant.obj.anims.stop();
     },
 
     updatePeriod: function () { return 1000; },
@@ -178,6 +192,7 @@ module.exports = {
         'keyboard': KeyboardAgent,
         'greedy': GreedyAgent,
         'idle': IdleAgent,
+        'dead': DeadAgent,
         /// Agent provided by the level
         'level': null,
     }

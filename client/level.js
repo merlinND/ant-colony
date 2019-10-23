@@ -245,11 +245,14 @@ const IsFoodEdibleLevel = new Class({
     isComplete: function() {
         // Level is complete when all *edible* foods have been picked
         for (var i = 0; i < this.items.length; ++i) {
-            const isEdible = !this.items[i].poison && (this.items[i].age <= 1);
-            if (isEdible && !this.items[i].isPicked)
+            if (this.isReallyEdible(this.items[i]) && !this.items[i].isPicked)
                 return false;
         }
         return true;
+    },
+
+    isReallyEdible: function(food) {
+        return !food.poison && (food.age <= 1);
     },
 
     getAgent: function getAgent() {
@@ -286,6 +289,15 @@ const IsFoodEdibleLevel = new Class({
             },
 
             levelSpecificFunction: function(game, ant, print, goto, scene) {
+                // If inventory contains non-edible food, we have died
+                for (var food of scene.level.items) {
+                    if (!food.isPicked || scene.level.isReallyEdible(food))
+                        continue;
+                    logger.error("Ouch, ça n'était pas commestible ! Essaie encore.");
+                    this.stop(game, ant);
+                    game.setAgent('dead');
+                }
+
                 // User function should return whether the food is edible
                 const isEdible = this.userFunction(game, ant, goto, scene);
                 if (!this.target) {
