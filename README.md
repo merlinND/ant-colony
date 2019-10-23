@@ -51,13 +51,21 @@ On an Ubuntu 16.04 web server:
 
 ```
 sudo apt-get install npm
-sudo npm install -g pm2
+sudo npm install -g pm2 grunt
+
+# Allow port 80 to be bound without sudo
+sudo apt-get install libcap2-bin
+sudo setcap cap_net_bind_service=+ep $(which node)
 
 cd /var/www
 git clone --recursive git@github.com:merlinND/ant-colony.git
 cd ant-colony
-npm install
-pm2 start index.js
+npm install --dev
+# Compile the application
+grunt
+
+# Start the app, pm2 will restart it if needed when rebooting, etc
+pm2 start ecosystem.config.js --env production
 ```
 
 ## Credits
