@@ -87,7 +87,7 @@ var ProgrammableAgent = new Class({
         ant.obj.anims.stop();
     },
 
-    updatePeriod: function () { return 1000; },
+    updatePeriod: function () { return 500; },
 });
 
 var GreedyAgent = new Class({
