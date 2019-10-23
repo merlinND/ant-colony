@@ -386,7 +386,7 @@ const ChooseClosestFoodLevel = new Class({
                     // Prepare user-friendly list of options
                     var options = [];
                     scene.level.items.forEach(function(item) {
-                        if (ant.inventory.indexOf(item) >= 0)
+                        if (item.isPicked)
                             return;
                         options.push(item);
                     });
