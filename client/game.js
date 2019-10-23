@@ -152,12 +152,15 @@ const init = function(container) {
         // User code is expected to contain one key function that the user is supposed to implement.
         // We add an instruction to return that function.
         var re = /^\s*function\s*([a-zA-Z0-9_]+)\s*\(/gmi;
-        var matches = code.matchAll(re);
-        if (matches != null) {
-            // Keep the last function's name
-            var functionName = null;
-            for (var match of matches)
-                functionName = match[1];
+
+        var match = null;
+        var functionName = null;
+        // Keep the last function's name
+        while ((match = re.exec(code)) !== null) {
+            functionName = match[1];
+        }
+        if (functionName != null) {
+            console.log('Returning user function: ' + functionName);
             code += '\nreturn ' + functionName + ';';
         }
 
