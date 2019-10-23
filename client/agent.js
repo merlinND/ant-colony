@@ -70,6 +70,11 @@ var ProgrammableAgent = new Class({
             args[0]("Niveau réussi !");
             this.stop(game, ant);
             game.setAgent("rotating");
+
+            var elem = document.getElementById("levelComplete");
+            if (elem) {
+                elem.className = ""
+            }
             return;
         }
 

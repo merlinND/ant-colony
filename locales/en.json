@@ -11,6 +11,7 @@
     	"play": "Play"
     },
 	"game": "Game",
+    "levelComplete": "Level complete!",
 
 	"DistanceToFood": {
         "instructions": "In **this** level, ...",
