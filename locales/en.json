@@ -34,8 +34,8 @@
         "instructions": "TODO: IsFoodEdible instructions",
         "starter_code": [
             "function is_edible(food) {",
-            "    // A fruit that is not poisoned (fruit.poison)",
-            "    // and that is less than two days old (fruit.age)",
+            "    // A fruit that is not poisoned (food.poison)",
+            "    // and that is less than two days old (food.age)",
             "    // is edible.",
             "};"
         ]

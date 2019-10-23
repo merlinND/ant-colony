@@ -139,7 +139,7 @@ const init = function(container) {
             }
         });
 
-        if (name == 'level' || name == 'rotating')
+        if (name == 'level' || name == 'rotating' || name == 'idle')
             this.agentIndicator.setText('');
         else
             this.agentIndicator.setText("Status: " + this.currentAgentName);

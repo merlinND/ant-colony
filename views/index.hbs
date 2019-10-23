@@ -25,7 +25,9 @@
                 <div class="tab-pane show active" id="nav-editor">
 {{>code_editor}}
                     <div class="button-bar">
-                        <div id="levelComplete" class="hidden">{{i18n "levelComplete"}}</div>
+                        <div id="levelComplete" class="hidden" data-url="{{nextLevel}}">
+                            {{i18n "levelComplete"}}
+                        </div>
                         <button name="reset">{{i18n "editor.reset"}}</button>
                         <button name="play" class="bg-primary">{{i18n "editor.play"}}</button>
                         {{!-- <button name="ff-2">x2</button> --}}

@@ -70,6 +70,13 @@ const availableLevels = {
     'closest': 'ChooseClosestFood',
     'foraging': 'Foraging',
 }
+const nextLevel = {
+    'direction': 'distance',
+    'distance': 'edible',
+    'edible': 'closest',
+    'closest': 'foraging',
+    'foraging': 'direction',
+}
 
 // ----- Routes
 app.get('/', (req, res) => {
@@ -90,6 +97,7 @@ app.get('/levels/:level', (req, res) => {
         'level': levelName,
         'levelStarterCode': levelName + ".starter_code",
         'levelInstructions': levelName + ".instructions",
+        'nextLevel': '/levels/' + nextLevel[req.params.level],
     });
 })
 

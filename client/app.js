@@ -50,6 +50,12 @@ const initAntsApp = function(container) {
     $('button[name="reset"]').on('click', function() {
         window.location.reload();
     });
+    $('#levelComplete').on('dblclick', function() {
+        var target = this.dataset.url;
+        if (target.indexOf('undefined') >= 0)
+            return;
+        window.location.replace(target);
+    })
 
 
     // Only let Phaser capture inputs when canvas is really focused
