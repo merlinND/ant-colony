@@ -80,10 +80,10 @@ const nextLevel = {
 
 // ----- Routes
 app.get('/', (req, res) => {
-    res.redirect('/levels/direction');
+    res.redirect('/levels/distance');
 })
 app.get('/levels', (req, res) => {
-    res.redirect('/levels/direction');
+    res.redirect('/levels/distance');
 })
 
 app.get('/levels/:level', (req, res) => {

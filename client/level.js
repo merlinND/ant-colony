@@ -109,6 +109,15 @@ const DistanceToFoodLevel = new Class({
         this.levelName = "DistanceToFood"
     },
 
+    isComplete: function isComplete() {
+        // Level is complete when all objects have been picked
+        var allfed = true;
+        this.game.ants.forEach(ant => {
+                allfed = (allfed && (ant.inventory.length > 0))
+        })
+        return allfed;
+    },
+
     getAgent: function getAgent() {
         const testDistanceFunction = function(computeDistance, ant) {
             var d = computeDistance(ant, ant);
@@ -116,10 +125,10 @@ const DistanceToFoodLevel = new Class({
                 logger.error("La fonction n'a pas de valeur de retour !");
                 return false;
             }
-            if (Math.abs(d) > 1e-4) {
-                logger.error("La distance d'un objet à lui même devrait être zéro !");
-                return false;
-            }
+            // if (Math.abs(d) > 1e-4) {
+            //     logger.error("La distance d'un objet à lui même devrait être zéro !");
+            //     return false;
+            // }
             return true;
         };
 
@@ -144,7 +153,7 @@ const DistanceToFoodLevel = new Class({
                     var self = this;
                     scene.level.items.forEach(function(item) {
                         if (ant.inventory.indexOf(item) >= 0) { return; }
-                        var newDistance = computeDistance(item, ant.obj.body);
+                        var newDistance = computeDistance(ant.obj.body.x, ant.obj.body.y, item.x, item.y);
                         if (newDistance < distance) {
                             distance = newDistance;
                             self.target = item;

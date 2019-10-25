@@ -16,7 +16,7 @@
 	"DistanceToFood": {
         "instructions": "TODO: DistanceToFood instructions",
         "starter_code": [
-            "function euclidian_distance(ant, obj) {",
+            "function euclidian_distance(ant_x, ant_y, obj_x, obj_y) {",
             "    // Your code here!",
             "};"
         ]

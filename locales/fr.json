@@ -16,7 +16,7 @@
     "DistanceToFood": {
         "instructions": "TODO: instructions pour DistanceToFood",
         "starter_code": [
-            "function distance_euclidienne(fourmi, objet) {",
+            "function distance_euclidienne(fourmi_x, fourmi_x, objet_x, objet_y) {",
             "    // Ton code ici!",
             "};"
         ]
