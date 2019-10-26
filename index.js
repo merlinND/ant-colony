@@ -38,7 +38,12 @@ app.engine('.hbs', exphbs({
         __n: function() {
             return i18n.__n.apply(this, arguments);
         },
-        markdown: markdownHelper,
+        markdown: markdownHelper({
+            html: true,
+            typographer: true,
+            quotes: '“”‘’',
+            langPrefix:   'language-',  // CSS language prefix for fenced blocks
+          }),
         join: function(val, delimiter, start, end) {
             var arry = [].concat(val);
             delimiter = ( typeof delimiter == "string" ? delimiter : ',' );
