@@ -11,19 +11,15 @@
         <div class="col editor-col">
             <nav>
                 <div class="nav nav-tabs" role="tablist">
-                    <a class="nav-item nav-link" id="nav-instructions-tab" data-toggle="tab" href="#nav-instructions" role="tab">{{i18n "instructions.title"}}</a>
-
                     <a class="nav-item nav-link active" id="nav-editor-tab" data-toggle="tab" href="#nav-editor" role="tab">{{i18n "editor.title"}}</a>
+                    <a class="nav-item nav-link" id="nav-startercode-tab" data-toggle="tab" href="#nav-startercode" role="tab">{{i18n "starterCode.title"}}</a>
                 </div>
             </nav>
 
             <div class="tab-content">
-                <div class="tab-pane" id="nav-instructions">
-{{>instructions}}
-                </div>
 
                 <div class="tab-pane show active" id="nav-editor">
-{{>code_editor}}
+                    {{>code_editor}}
                     <div class="button-bar">
                         <div id="levelComplete" class="hidden" data-url="{{nextLevel}}">
                             {{i18n "levelComplete"}}
@@ -35,7 +31,25 @@
                         {{!-- <button name="ff-10">x10</button> --}}
                     </div>
                 </div>
+                <div class="tab-pane show" id="nav-startercode">
+                    <p>{{i18n "starterCode.templateCode"}}
+                        <pre class="startercode">{{i18n levelStarterCode }}</pre>
+                    </p>
+                </div>
             </div>
+
+            <nav style="margin-top: 5px;">
+                <div class="nav nav-tabs" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-instructions-tab" data-toggle="tab" href="#nav-instructions" role="tab">{{i18n "instructions.title"}}</a>
+                </div>
+            </nav>
+
+            <div class="tab-content">
+                <div class="tab-pane show active" id="nav-instructions">
+                    {{>instructions}}
+                </div>
+            </div>
+
         </div>
 
         {{!-- Right column --}}
@@ -48,8 +62,8 @@
 
             <div class="tab-content">
                 <div class="tab-pane show active" id="nav-game">
-{{>game_view}}
-{{>console}}
+                    {{>game_view}}
+                    {{>console}}
                 </div>
             </div>
         </div>

@@ -47,7 +47,7 @@ body, html {
 .instructions {
     text-align: justify;
 }
-.instructions pre {
+#nav-startercode pre {
     background-color: #f0f0f0;
     padding: 5px;
 }

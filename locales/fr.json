@@ -2,13 +2,16 @@
     "mainTitle": "Ant Colony",
     "instructions": {
         "title": "Instructions",
-        "begin": "Commencer",
-        "templateCode": "On vous donne ce code pour commencer:"
+        "begin": "Commencer"
     },
     "editor": {
         "title": "Éditeur",
         "reset": "Réinitialiser",
         "play": "Jouer"
+    },
+    "starterCode": {
+        "title": "Code de départ",
+        "templateCode": "On vous donne ce code pour commencer:"
     },
     "game": "Jeu",
     "levelComplete": "Niveau réussi !",
