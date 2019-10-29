@@ -89,7 +89,29 @@
         ]
     },
     "ChooseClosestFood": {
-        "instructions": "TODO: instructions pour ChooseClosestFood",
+        "instructions": [
+            "Il y a beaucoup de choses à manger dans ce niveau ! Aidez les fourmis à choisir l'option la plus proche parmi tous ces fruits.",
+            "",
+            "#### Syntaxe",
+            "",
+            "- Appeler une fonction: `var distance = distance_euclidienne(maFourmi, monObjet);",
+            "- Vérifier si un nombre est plus petit qu'un autre:",
+            "```",
+            "if (nombre1 < nombre2) {",
+            "    // Faire quelque chose si nombre1 est plus petit que nombre2",
+            "}",
+            "```",
+            "- Faire quelque chose pour chaque élément d'une liste:",
+            "```",
+            "for (var fruit of listeFruits) {",
+            "    // Faire quelque chose avec chaque fruit",
+            "}",
+            "```",
+            "",
+            "#### Objectif",
+            "Le niveau est réussi quand tous les fruits ont été mangés.",
+            ""
+        ],
         "starter_code": [
             "function distance_euclidienne(fourmi, objet) {",
             "    var d1 = fourmi.x - objet.x;",
@@ -97,9 +119,10 @@
             "    return Math.sqrt(d1 * d1 + d2 * d2);",
             "};",
             "",
-            "function choisir_plus_proche(fourmi, listObjets) {",
-            "    // Use the function distance_euclidienne to find the closest",
-            "    // objet in the given list listObjets. Return the closest objet.",
+            "function choisir_plus_proche(fourmi, listeObjets) {",
+            "    // Utilises la fonction distance_euclidienne pour trouver l'objet",
+            "    // le plus proche dans la list donnée listeObjets.",
+            "    // Retourne l'object le plus proche.",
             "};"
         ]
     }
