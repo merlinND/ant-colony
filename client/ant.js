@@ -45,7 +45,7 @@ var Ant = new Class({
         }
 
         const updatePeriod = this.agent.updatePeriod();
-        this.obj.anims.play("walk");
+        this.obj.anims.play("walk", true);
 
         var direction = new Phaser.Math.Vector2(
             x - this.obj.x, y - this.obj.y);
