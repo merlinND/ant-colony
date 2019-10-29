@@ -6,7 +6,7 @@
     },
     "editor": {
         "title": "Éditeur",
-        "reset": "Réinitialiser",
+        "reset": "Recharger",
         "play": "Jouer"
     },
     "starterCode": {
@@ -18,18 +18,24 @@
 
     "DistanceToFood": {
         "instructions": [
-            "Pour se repérer dans son environement, la FourmIA(r) a besoin de connaître la distance avec les objets qui l'entourent, tel que la nourriture. Dans ce niveau, tu dois créer une fonction `euclidian_distance` qui calcule la distance euclidienne entre deux points dans le monde virtuel.",
-            "La fonction doit accepter 4 arguments: `fourmi_x` et `fourmi_y` sont les coordonnées $x$ et $y$ de la fourmi dans le monde, `objet_x` et `objet_y` sont celles de l'objet dont on veut connaitre la distance. La fonction doit retourner la valeur de la distance euclidienne.",
+            "Pour se repérer dans son environement, la fourmi a besoin de connaître la distance avec les objets qui l'entourent, tel que la nourriture. Dans ce niveau, tu dois créer une fonction `distance_euclidienne` qui calcule la distance euclidienne entre deux points dans le monde virtuel.",
+            "La fonction doit accepter 4 arguments: `fourmi_x` et `fourmi_y` sont les coordonnées `x` et `y` de la fourmi dans le monde, `objet_x` et `objet_y` sont celles de l'objet dont on veut connaitre la distance. La fonction doit retourner la valeur de la distance euclidienne.",
             "#### Notes",
             "La distance euclidienne dans un espace à deux dimensions est donnée par:",
             "![sqrt((x_1 - x_2)^2 + (y_1 - y_2)^2)](https://wikimedia.org/api/rest_v1/media/math/render/svg/617b88d273f6cec8288acc4a071c855ce441e49b)",
             "Tu peux utiliser la fonction `Math.sqrt(x)`, qui retourne la racine carrée du nombre `x` qui lui est passé en argument.",
+            "#### Syntaxe",
+            "",
+            "- Déclarer une variable: `var maVariable = 42;`",
+            "- Appeler une fonction: `maFonction(argument1, argument2)`. Par exemple, `var racine = Math.sqrt(maVariable);`",
+            "- Retourner une valeur: `return maVariable;`",
+            "",
             "#### But",
             "Dans ce niveau, les trois fourmis AI vont utiliser ta fonction pour chercher la nourriture la plus proche, puis vont aller la manger. Le niveau est gagné si **chacune** des fourmis a pu manger un fruit.",
-            "Attention: quand une fourmi a mangé un fruit, elle va automatiquement en chercher un autre. Il est donc important que ta fonction soit correcte, pour que chaque fourmi se dirige directement vers le fruit le plus proche avant que les autres fourmis ne viennent le manger." 
+            "Attention: quand une fourmi a mangé un fruit, elle va automatiquement en chercher un autre. Il est donc important que ta fonction soit correcte, pour que chaque fourmi se dirige directement vers le fruit le plus proche avant que les autres fourmis ne viennent le manger."
         ],
         "starter_code": [
-            "function distance_euclidienne(fourmi_x, fourmi_x, objet_x, objet_y) {",
+            "function distance_euclidienne(fourmi_x, fourmi_y, objet_x, objet_y) {",
             "    // Ton code ici!",
             "};"
         ]
