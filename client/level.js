@@ -137,7 +137,7 @@ const DistanceToFoodLevel = new Class({
 
             levelSpecificFunction: function(game, ant, print, goto, scene) {
                 // User function should compute the Euclidean distance
-                const computeDistance = this.userFunction(game, ant, goto, scene);
+                const computeDistance = this.userFunction(game, ant, print, goto, scene);
                 if (!this.target) {
                     print('Je cherche de la nourriture...');
 
@@ -205,7 +205,7 @@ const DirectionOfFoodLevel = new Class({
 
             levelSpecificFunction: function(game, ant, print, goto, scene) {
                 // User function should compute the Euclidean distance
-                const computeAngle = this.userFunction(game, ant, goto, scene);
+                const computeAngle = this.userFunction(game, ant, print, goto, scene);
                 if (!this.target) {
                     print('Je cherche de la nourriture...');
 
@@ -291,7 +291,7 @@ const IsFoodEdibleLevel = new Class({
                 if (!this.userFunction)
                     return true;
                 const f = function(game, ant, print, goto, scene) {
-                    const isEdible = this.userFunction(game, ant, goto, scene);
+                    const isEdible = this.userFunction(game, ant, print, goto, scene);
                     return isEdible(object);
                 };
                 return this.tryRunningFunction(f.bind(this), game, ant, args);
@@ -308,7 +308,7 @@ const IsFoodEdibleLevel = new Class({
                 }
 
                 // User function should return whether the food is edible
-                const isEdible = this.userFunction(game, ant, goto, scene);
+                const isEdible = this.userFunction(game, ant, print, goto, scene);
                 if (!this.target) {
                     print('Je cherche de la nourriture...');
 
@@ -382,7 +382,7 @@ const ChooseClosestFoodLevel = new Class({
 
             levelSpecificFunction: function(game, ant, print, goto, scene) {
                 // User function should return whether the food is edible
-                const pickClosest = this.userFunction(game, ant, goto, scene);
+                const pickClosest = this.userFunction(game, ant, print, goto, scene);
                 if (!this.target) {
                     print('Je cherche de la nourriture...');
 

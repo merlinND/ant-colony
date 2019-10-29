@@ -38,7 +38,12 @@ var Ant = new Class({
         this.agent.update(game, this, args);
     },
 
-    goto: function goto(x,y) {
+    goto: function goto(x, y) {
+        if (y == undefined || isNaN(x) || isNaN(y)) {
+            console.error("goto called with incorrect arguments: " + x + ", " + y);
+            return;
+        }
+
         const updatePeriod = this.agent.updatePeriod();
         this.obj.anims.play("walk");
 
