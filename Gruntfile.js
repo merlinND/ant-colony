@@ -18,6 +18,14 @@ module.exports = function(grunt) {
                 }
             },
         },
+        // Minification
+        uglify: {
+            build: {
+              files: {
+                'static/js/app.min.js': ['static/js/app.js']
+              }
+            }
+        },
         watch: {
             // files: ['**/*.js', '!static/js/*'],
             express: {
@@ -37,6 +45,10 @@ module.exports = function(grunt) {
                 atBegin: true,
               }
             },
+            uglify: {
+                files: [ 'static/js/app.js' ],
+                tasks: [ 'uglify' ]
+            }
             // tasks: ['browserify']
         },
     })
@@ -44,6 +56,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-express-server');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-browserify');
+    grunt.loadNpmTasks('grunt-contrib-uglify-es');
 
     grunt.registerTask('default', ['watch']);
 };
