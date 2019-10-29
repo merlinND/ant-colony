@@ -30,7 +30,7 @@
             "- Appeler une fonction: `maFonction(argument1, argument2)`. Par exemple, `var racine = Math.sqrt(maVariable);`",
             "- Retourner une valeur: `return maVariable;`",
             "",
-            "#### But",
+            "#### Objectif",
             "Dans ce niveau, les trois fourmis AI vont utiliser ta fonction pour chercher la nourriture la plus proche, puis vont aller la manger. Le niveau est gagné si **chacune** des fourmis a pu manger un fruit.",
             "Attention: quand une fourmi a mangé un fruit, elle va automatiquement en chercher un autre. Il est donc important que ta fonction soit correcte, pour que chaque fourmi se dirige directement vers le fruit le plus proche avant que les autres fourmis ne viennent le manger."
         ],
@@ -50,7 +50,36 @@
         ]
     },
     "IsFoodEdible": {
-        "instructions": "TODO: instructions pour IsFoodEdible",
+        "instructions": [
+            "Les fourmis ne peuvent pas simplement manger tout ce qui leur passe sous le nez. Si elles ne font pas attention, elles pourraient s'empoisonner !",
+            "Dans ce niveau, certains fruits sont **empoisonnés** (`fruit.poison`) ou trop vieux (`fruit.age`, en nombre de jours).",
+            "Vous devez écrire une fonction qui permet à la fourmi de décider si elle va manger un fruit ou pas. Un fruit est commestible si:",
+            "- Il n'est **pas** empoisonné,",
+            "- **Et** il est agé de un jour ou moins",
+            "",
+            "Votre fonction doit vérifier ces deux conditions et retourner `true` si elles sont valides, ou `false` sinon.",
+            "",
+            "#### Syntaxe",
+            "- Vérifier si une variable est plus petite qu'un nombre: `var estJeune = personne.age < 25;`.",
+            "  La variable `estJeune` contiendra soit `true`, soit `false` selon le résultat de la comparaison.",
+            "- Prendre le contraire d'un booléen (_non_): `var estVieux = !estJeune;`",
+            "- Vérifier si deux conditions sont toutes les deux vraies (_et_): `var estCommestible = estJeune && pasPoison;`",
+            "- Retourner vrai: `return true;`",
+            "- Retourner faux: `return false;`",
+            "- Faire quelque chose seulement si une condition est vraie:",
+            "```",
+            "if (maCondition) {",
+            "    // Éxécuter ce code seulement si la condition est vraie",
+            "} else {",
+            "    // Sinon, exécuter ce code",
+            "}",
+            "```",
+            "  La partie à partir de `else` est optionnelle.",
+
+            "",
+            "#### Objectif",
+            "Le niveau est réussi si la fourmi peut manger tous les fruits commestibles sans s'empoisonner."
+        ],
         "starter_code": [
             "function est_commestible(fruit) {",
             "    // Un fruit qui n'est pas empoisonné (fruit.poison)",
