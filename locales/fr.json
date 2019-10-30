@@ -91,10 +91,12 @@
     "ChooseClosestFood": {
         "instructions": [
             "Il y a beaucoup de choses à manger dans ce niveau ! Aidez les fourmis à choisir l'option la plus proche parmi tous ces fruits.",
+            "Parcourez la liste `listeObjets` de fruits pour trouver le plus proche. La fonction `distance_euclidienne` est fournie pour vous aider à calculer la distance.",
+            "Votre fonction doit retourner l'objet le plus proche (l'objet lui-même, **pas la distance**).",
             "",
             "#### Syntaxe",
             "",
-            "- Appeler une fonction: `var distance = distance_euclidienne(maFourmi, monObjet);",
+            "- Appeler une fonction: `var distance = distance_euclidienne(maFourmi, monObjet);`",
             "- Vérifier si un nombre est plus petit qu'un autre:",
             "```",
             "if (nombre1 < nombre2) {",
