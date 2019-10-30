@@ -47,6 +47,7 @@ body, html {
 .instructions {
     text-align: justify;
     padding: 20px;
+    font-size: 12px;
 }
 #nav-startercode pre {
     background-color: #f0f0f0;
@@ -70,6 +71,7 @@ body, html {
 .code-editor, .code-editor textarea, .game-view {
     width: 100%; height: 100%;
     margin: 0; padding: 0;
+    font-size: 14px;
 }
 
 .button-bar {
